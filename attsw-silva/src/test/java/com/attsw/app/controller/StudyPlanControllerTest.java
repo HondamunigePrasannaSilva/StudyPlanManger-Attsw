@@ -219,7 +219,6 @@ public class StudyPlanControllerTest {
 		ArrayList<Course> studyPlan = new ArrayList<Course>();
 		studyPlan.add(course);
 		student.setStudyPlan(studyPlan);
-		
 		return student;
 	}
 	
