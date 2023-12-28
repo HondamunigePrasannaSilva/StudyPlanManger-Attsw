@@ -3,7 +3,6 @@ package com.attsw.app.controller;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import java.util.ArrayList;
 
 import com.attsw.app.model.Course;
