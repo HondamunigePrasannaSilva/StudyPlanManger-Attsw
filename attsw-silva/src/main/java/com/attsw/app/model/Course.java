@@ -21,5 +21,14 @@ public class Course {
 		return courseId;
 	}
 
+	public String getCourseName() {
+		return courseName;
+	}
+	
+	public int getCfu() {
+		return cfu;
+	}
+	
+
 
 }

@@ -33,51 +33,26 @@ public class StudyPlanControllerTest {
 	}
 	
 	@Test
-	public void testFindStudentWhenStudenteIsNotPresent()
+	public void testFindThrowExceptionWhenStudentIsNotFound()
 	{
+		Student student = createStudent();
 		
 		when(studentRepository.findById("1")).thenReturn(null);
-		assertThat(studentController.find("1")).isEqualTo(null);
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> studentController.find("1"));
+		assertEquals("Student not found", exception.getMessage());
 		
 	}
-	
+
 	@Test
 	public void testFindStudentWhenStudentIsPresent()
 	{
 		Student student = createStudent();
-
 		when(studentRepository.findById("1")).thenReturn(student);
-		assertThat(studentController.find("1")).isEqualTo(student);
-			
+		assertThat(studentController.find("1")).isEqualTo(student);		
 	}
-	
-	@Test
-	public void testFindStudentCallsGetCourseFromRepository() {
-		Student student = createStudent();
 
-		when(studentRepository.findById("1")).thenReturn(student);
-		studentController.find("1");
-		verify(studentRepository).getStudyPlan("1");
-	}
-	
-	@Test
-	public void testFindStudentCallsGetCourseFromRepositoryAndUpdateStudyPlan() {
-		Student student = createStudent();
 
-		when(studentRepository.findById("1")).thenReturn(student);
-		
-		Course course = new Course("1", "Analisi 1", 12);
-		
-		ArrayList<Course> studyPlan = new ArrayList <Course>();
-		studyPlan.add(course);
-
-		when(studentRepository.getStudyPlan("1")).thenReturn(studyPlan);
-		
-		studentController.find("1");
-		verify(studentRepository).getStudyPlan("1");
-		
-		assertThat(student.getStudyPlan()).isEqualTo(studyPlan);
-	}
 	// -------------------------INSERT COURSE INTO STUDY PLAN-------------------------
 	@Test
 	public void testInsertCourseIntoStudyPlan()
@@ -97,9 +72,10 @@ public class StudyPlanControllerTest {
 	public void testInsertCourseIntoStudyPlanWhenCourseIsAlreadyPresent() {
 		Student student = createStudentWithStudyPlan();
 		Course course = new Course("1", "Analisi 1", 12);
-
+		
+		when(courseRepository.findById("1")).thenReturn(course);
+		
 		studentController.insertCourseIntoStudyPlan(student, course);
-		when(courseRepository.findById("2")).thenReturn(course);
 		
 		assertFalse(student.getStudyPlan().contains(course));
 		
@@ -110,12 +86,34 @@ public class StudyPlanControllerTest {
 	public void testInsertCourseIntoStudyPlanCallsfindByIdFromRepository() {
 		Student student = createStudentWithStudyPlan();
 		Course course = new Course("2", "Analisi 2", 12);
-
+		
+		when(courseRepository.findById("2")).thenReturn(course);
 		studentController.insertCourseIntoStudyPlan(student, course);
 		
 		verify(courseRepository).findById(course.getCourseId());
 	}
 	
+	@Test
+	public void testInsertCourseIntoStudyPlanThrowsExceptionWhenCourseIsNotPresent() {
+		Student student = createStudentWithStudyPlan();
+		Course course = new Course("3", "Analisi 3", 12);
+		
+		when(courseRepository.findById("3")).thenReturn(null);
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> studentController.insertCourseIntoStudyPlan(student, course));
+
+		assertEquals("Course not in repository", exception.getMessage());
+	}
+	@Test
+	public void testInsertCourseIntoStudyPlanCallsUpdateStudyPlanFromRepository() {
+		Student student = createStudentWithStudyPlan();
+		Course course = new Course("2", "Analisi 2", 12);
+
+		when(courseRepository.findById("2")).thenReturn(course);
+		studentController.insertCourseIntoStudyPlan(student, course);
+
+		verify(studentRepository).updateStudyPlan(student);
+	}
 	
 	
 	// -------------------------REMOVE COURSE FROM STUDY PLAN-------------------------
@@ -160,6 +158,8 @@ public class StudyPlanControllerTest {
 
 		verify(studentRepository).updateStudyPlan(student);
 	}
+	
+	/*
 	// ------------------------------UPDATE STUDY PLAN--------------------------------
 	
 	@Test
@@ -203,7 +203,7 @@ public class StudyPlanControllerTest {
 		studentController.updateStudyPlan(student, course2);
 
 		verify(studentRepository).updateStudyPlan(student);
-	}
+	}*/
 
 	// --------------------------- PRIVATE METHODS ------------------------------------
 	

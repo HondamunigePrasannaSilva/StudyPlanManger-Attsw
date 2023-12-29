@@ -12,9 +12,7 @@ public interface StudentRepository {
 	public List<Student> findAll();
 	
 	public Student findById(String id);
-	
-	public ArrayList<Course> getStudyPlan(String id);
-	
+		
 	public void updateStudyPlan(Student student);
 	
 

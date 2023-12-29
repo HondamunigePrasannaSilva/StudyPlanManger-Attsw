@@ -22,16 +22,19 @@ import com.attsw.app.repository.StudentRepository;
 	public Student find(String studentId) {
 		
 		Student student = studentRepository.findById(studentId);
-		if (student == null)
-			return null;
+		if (student != null)
+			return student;
+		else
+			throw new IllegalArgumentException("Student not found");
 		
-		ArrayList<Course> studyPlan = studentRepository.getStudyPlan(student.getId());
-		student.setStudyPlan(studyPlan);
+		// deve chiamare la view
 		
-		return student;
 	}
 
 	public void insertCourseIntoStudyPlan(Student student, Course course) {
+		
+		if (courseRepository.findById(course.getCourseId()) == null)
+			throw new IllegalArgumentException("Course not in repository");
 		
 		if (student.getStudyPlan().stream()
 				.filter(c -> c.getCourseId() == course.getCourseId())
@@ -40,10 +43,10 @@ import com.attsw.app.repository.StudentRepository;
         
 
 		
-		if (courseRepository.findById(course.getCourseId()) == null)
-			return;
 		
 		student.addCourse(course);
+		studentRepository.updateStudyPlan(student);
+		// deve chiamare anche la view 
 		
 	}
 
@@ -56,10 +59,10 @@ import com.attsw.app.repository.StudentRepository;
 		else
 			throw new IllegalArgumentException("Course not in study plan");
 		
-		
+		// deve chiama la view
 	}
 
-	public void updateStudyPlan(Student student, Course course) {
+	/*public void updateStudyPlan(Student student, Course course) {
 		
 		ArrayList<Course> sp = student.getStudyPlan();
 		
@@ -70,7 +73,7 @@ import com.attsw.app.repository.StudentRepository;
 		}
 			
 		
-	}
+	}*/
 
 	
 	
