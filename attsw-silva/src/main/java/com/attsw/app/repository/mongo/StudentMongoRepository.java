@@ -19,7 +19,6 @@ import com.mongodb.MongoClient;
 
 public class StudentMongoRepository implements StudentRepository{
 	public static final String STUDENT_COLLECTION_NAME = "student";
-	public static final String STUDENT_COURSE_COLLECTION_NAME = "student_course";
 	public static final String STUDYPLAN_DB_NAME = "studyplan";
 	
 	private MongoCollection<Document> studentCollection;

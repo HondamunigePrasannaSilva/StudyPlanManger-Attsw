@@ -1,14 +1,12 @@
 package com.attsw.app.repository.mongo;
 
 import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDENT_COLLECTION_NAME;
-import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDENT_COURSE_COLLECTION_NAME;
 import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDYPLAN_DB_NAME;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -18,7 +16,6 @@ import org.testcontainers.containers.MongoDBContainer;
 import com.attsw.app.model.Course;
 import com.attsw.app.model.Student;
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
@@ -36,7 +33,7 @@ public class StudentMongoRepositoryTestIT {
 	private MongoClient client;
 	private StudentMongoRepository studentMongoRepository;
 	private MongoCollection<Document> studentCollection;
-	private MongoCollection<Document> studentCourseCollection;
+	
 	
 	@Before
 	public void setup() {
@@ -50,8 +47,6 @@ public class StudentMongoRepositoryTestIT {
 		MongoDatabase database = client.getDatabase(STUDYPLAN_DB_NAME);
 		database.drop();
 		studentCollection = database.getCollection(STUDENT_COLLECTION_NAME);
-		studentCourseCollection = database.getCollection(STUDENT_COURSE_COLLECTION_NAME);
-	
 	}
 
 	
@@ -59,7 +54,7 @@ public class StudentMongoRepositoryTestIT {
 	public void tearDown() {
 		client.close();
 	}
-	
+
 	@Test
 	public void testFindById() {
 	
@@ -67,6 +62,10 @@ public class StudentMongoRepositoryTestIT {
 		Document d2 = addStudentWithStudyPlan("2");
 		assertTrue(studentMongoRepository.findById("1").getId()
 				.equals(fromDocumentToStudent(d1).getId()));
+	}
+
+	public void testFindByIdWhenIdDoesNotExist() {
+		assertTrue(studentMongoRepository.findById("1") == null);
 	}
 	
 	@Test
@@ -79,6 +78,10 @@ public class StudentMongoRepositoryTestIT {
 		    .extracting(Student::getId)
 		    .containsExactlyInAnyOrder("3","4");
 	
+	}
+	@Test
+	public void testFindAllWhenDbIsEmpty() {
+		assertThat(studentMongoRepository.findAll()).isEmpty();
 	}
 	
 	@Test
@@ -121,9 +124,6 @@ public class StudentMongoRepositoryTestIT {
 
 
 	private Student fromDocumentToStudent(Document d) {
-		
-		if (d == null)
-			return null;
 		
 		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
 		Student s = new Student(d.get("id").toString(), 

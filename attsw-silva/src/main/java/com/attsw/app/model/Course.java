@@ -10,7 +10,6 @@ public class Course {
 	
 
 	public Course(String courseId, String courseName, int cfu) {
-		// TODO Auto-generated constructor stub
 		this.courseId = courseId;
 		this.courseName = courseName;
 		this.cfu = cfu;
@@ -29,6 +28,10 @@ public class Course {
 		return cfu;
 	}
 	
-
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Course: " + courseId + " " + courseName + " " + cfu;
+	}
 
 }
