@@ -73,10 +73,7 @@ public class CourseMongoRepositoryTestIT {
 	public void testFindByIdWhenIdDoesNotExist() {
         assertTrue(CourseMongoRepository.findById("1") == null);
     }
-	private Course fromDocumentToCourse(Document d) {
-		return new Course(d.getString("courseId"),d.getString("courseName"),
-				Integer.parseInt(d.getString("cfu")));
-	}
+
 	private Document addCourseToCollection(String id, String name, String cfu) {
 		Document course = new Document();
 		course.append("courseId", id);

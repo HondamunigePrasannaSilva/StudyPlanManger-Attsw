@@ -63,7 +63,8 @@ public class StudentMongoRepositoryTestIT {
 		assertTrue(studentMongoRepository.findById("1").getId()
 				.equals(fromDocumentToStudent(d1).getId()));
 	}
-
+	
+	@Test
 	public void testFindByIdWhenIdDoesNotExist() {
 		assertTrue(studentMongoRepository.findById("1") == null);
 	}

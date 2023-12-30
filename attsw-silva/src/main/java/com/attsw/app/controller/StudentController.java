@@ -40,9 +40,6 @@ import com.attsw.app.repository.StudentRepository;
 				.filter(c -> c.getCourseId() == course.getCourseId())
 				.count() > 0)
 			return ;
-        
-
-		
 		
 		student.addCourse(course);
 		studentRepository.updateStudyPlan(student);

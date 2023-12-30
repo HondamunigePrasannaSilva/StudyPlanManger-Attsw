@@ -32,7 +32,6 @@ public class CourseMongoRepository implements CourseRepository {
 	}
 	@Override
 	public Course findById(String id) {
-		// TODO Auto-generated method stub
 		Document c = courseCollection.find(new Document("courseId", id)).first();
 		if (c == null)
 			return null;
@@ -45,7 +44,6 @@ public class CourseMongoRepository implements CourseRepository {
 		
 		Course course = new Course(d.getString("courseId"),d.getString("courseName"),
 				Integer.parseInt(d.getString("cfu")));
-		System.out.println(course.toString());
 		return course;
 	}
 	
