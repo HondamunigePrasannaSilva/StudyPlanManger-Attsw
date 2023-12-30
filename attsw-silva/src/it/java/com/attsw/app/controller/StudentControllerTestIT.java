@@ -4,6 +4,7 @@ import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDENT_COLL
 import static com.attsw.app.repository.mongo.CourseMongoRepository.STUDENT_COURSE_COLLECTION_NAME;
 import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDYPLAN_DB_NAME;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +15,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.testcontainers.containers.MongoDBContainer;
 
 import com.attsw.app.repository.mongo.StudentMongoRepository;
+import com.attsw.app.view.StudyPlanView;
 import com.attsw.app.model.Course;
 import com.attsw.app.model.Student;
 import com.attsw.app.repository.mongo.CourseMongoRepository;
@@ -38,6 +41,9 @@ public class StudentControllerTestIT {
 	private MongoCollection<Document> studentCollection;
 	private MongoCollection<Document> courseCollection;
 	
+	@Mock
+	private StudyPlanView studyPlanView;
+	
 	@Before
 	public void setup() {
 	
@@ -55,7 +61,8 @@ public class StudentControllerTestIT {
 		studentCollection = database.getCollection(STUDENT_COLLECTION_NAME);
 		courseCollection = database.getCollection(STUDENT_COURSE_COLLECTION_NAME);
 		
-		studentController = new StudentController(studentMongoRepository, courseMongoRepository);
+		studyPlanView = mock(StudyPlanView.class);
+		studentController = new StudentController(studentMongoRepository, courseMongoRepository, studyPlanView);
 	}
 
 	
@@ -63,16 +70,14 @@ public class StudentControllerTestIT {
 	public void tearDown() {
 		client.close();
 	}
-	
+
 	@Test
 	public void testFindStudentById() {
-		
 		Document d  = addStudentWithStudyPlan("1");
 		Student student = studentController.find("1");
-		assertThat(student.getId()).isEqualTo(d.get("id"));
-		
+		assertThat(student.getId()).isEqualTo(d.get("id"));	
 	}
-	
+
 	@Test
 	public void testInsertNewCourseIntoStudyPlan() {
 
@@ -80,13 +85,13 @@ public class StudentControllerTestIT {
 		Course c = new Course("3", "Sistemi Operativi", 12);
 		Document course = addCourseToDB("3", "Sistemi Operativi", "12");
 		Student s = fromDocumentToStudent(d);
-		
+
 		studentController.insertCourseIntoStudyPlan(s, c);
-		
+
 		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
 				.containsExactlyInAnyOrder("1", "2", "3");
 	}
-	
+
 	@Test
 	public void testRemoveCourseFromStudyPlan() {
 
@@ -99,6 +104,7 @@ public class StudentControllerTestIT {
 		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
 				.containsExactly("2");
 	}
+
 	// ---------------------------------------------------------------------------------
 	private Document addCourseToDB(String id, String name, String cfu) {
 
@@ -110,6 +116,7 @@ public class StudentControllerTestIT {
 		
 		return course;
 	}
+	
 	private Document addStudentWithStudyPlan(String id){
 		
 		Document d = new Document()
@@ -135,7 +142,7 @@ public class StudentControllerTestIT {
 		
 	}
 	private Student fromDocumentToStudent(Document d) {
-		
+
 		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
 		Student s = new Student(d.get("id").toString(), 
 								d.get("name").toString(), 
@@ -146,12 +153,11 @@ public class StudentControllerTestIT {
 			studyPlanList.add(new Course(document.get("courseId").toString(),
 					                     document.get("courseName").toString(),
 					                     (int) document.get("cfu")));
-			
+
 		}
 		s.setStudyPlan(studyPlanList);
-		
+
 		return s;
 	}
-
 
 }

@@ -6,35 +6,38 @@ import com.attsw.app.model.Course;
 import com.attsw.app.model.Student;
 import com.attsw.app.repository.CourseRepository;
 import com.attsw.app.repository.StudentRepository;
+import com.attsw.app.view.StudyPlanView;
 
 
  public class StudentController {
 
 	private StudentRepository studentRepository;
 	private CourseRepository courseRepository;
+	private StudyPlanView studyPlanView;
 
-	public StudentController(StudentRepository studentRepository, CourseRepository courseRepository) {
+	public StudentController(StudentRepository studentRepository, CourseRepository courseRepository, StudyPlanView studyPlanView) {
 		
 		this.studentRepository = studentRepository;
 		this.courseRepository = courseRepository;
+		this.studyPlanView = studyPlanView;
 	}
 
 	public Student find(String studentId) {
 		
 		Student student = studentRepository.findById(studentId);
-		if (student != null)
-			return student;
+
+		if (student == null)
+			studyPlanView.showError("Student not found");
 		else
-			throw new IllegalArgumentException("Student not found");
+			studyPlanView.showStudyPlan(student.getStudyPlan());
 		
-		// deve chiamare la view
-		
+		return student;
 	}
 
 	public void insertCourseIntoStudyPlan(Student student, Course course) {
 		
 		if (courseRepository.findById(course.getCourseId()) == null)
-			throw new IllegalArgumentException("Course not in repository");
+			studyPlanView.showError("Course not found");
 		
 		if (student.getStudyPlan().stream()
 				.filter(c -> c.getCourseId() == course.getCourseId())
@@ -43,36 +46,42 @@ import com.attsw.app.repository.StudentRepository;
 		
 		student.addCourse(course);
 		studentRepository.updateStudyPlan(student);
-		// deve chiamare anche la view 
+		studyPlanView.CourseAdded(course);
 		
 	}
 
 	public void removeCourseFromStudyPlan(Student student, Course course) {
 		
 		ArrayList<Course> sp = student.getStudyPlan();
-				
-		if(sp.removeIf(c -> c.getCourseId() == course.getCourseId()))	
+
+		if(sp.removeIf(c -> c.getCourseId() == course.getCourseId()))
 			studentRepository.updateStudyPlan(student);
 		else
-			throw new IllegalArgumentException("Course not in study plan");
-		
-		// deve chiama la view
+			studyPlanView.showError("Course not in study plan");
+
 	}
 
-	/*public void updateStudyPlan(Student student, Course course) {
+	public Student updateStudyPlan(Student student, Course course1, Course course2) {
 		
-		ArrayList<Course> sp = student.getStudyPlan();
-		
-		if(sp.removeIf(c -> c.getCourseId().equals(course.getCourseId())))
+		Course courseToAdd = courseRepository.findById(course2.getCourseId());
+		if (courseToAdd == null)
 		{
-			student.addCourse(course);
-			studentRepository.updateStudyPlan(student);
+			studyPlanView.showError("Course not found");
+			return student;
 		}
+		ArrayList<Course> sp = student.getStudyPlan();
+		if(sp.removeIf(c -> c.getCourseId() == course1.getCourseId()))	
+		{	
+			studentRepository.updateStudyPlan(student);
+			student.addCourse(courseToAdd);		
+			studyPlanView.CourseRemoved(course1);
+			studyPlanView.CourseAdded(courseToAdd);
 			
+		}
+		return student;
 		
-	}*/
+	}
 
-	
-	
+
 
 }
