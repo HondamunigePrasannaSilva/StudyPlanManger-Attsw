@@ -2,8 +2,11 @@ package com.attsw.app.repository.mongo;
 
 import static com.attsw.app.repository.mongo.CourseMongoRepository.STUDENT_COURSE_COLLECTION_NAME;
 import static com.attsw.app.repository.mongo.CourseMongoRepository.STUDYPLAN_DB_NAME;
+import static com.attsw.app.repository.mongo.CourseMongoRepository.COURSE_ID;
+import static com.attsw.app.repository.mongo.CourseMongoRepository.COURSE_NAME;
+import static com.attsw.app.repository.mongo.CourseMongoRepository.CFU;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.bson.Document;
@@ -75,14 +78,13 @@ public class CourseMongoRepositoryTestIT {
     }
 
 	private Document addCourseToCollection(String id, String name, String cfu) {
+
 		Document course = new Document();
-		course.append("courseId", id);
-		course.append("courseName", name);
-		course.append("cfu", cfu);
+		course.append(COURSE_ID, id);
+		course.append(COURSE_NAME, name);
+		course.append(CFU, cfu);
 		CourseCollection.insertOne(course);
 		
-		Document c = CourseCollection.find(new Document("courseId", id)).first();
-		System.out.println(c);
 		return course;
 	}
 	

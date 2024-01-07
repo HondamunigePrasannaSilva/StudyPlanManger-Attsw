@@ -15,6 +15,11 @@ public class CourseMongoRepository implements CourseRepository {
 	
 	public static final String STUDENT_COURSE_COLLECTION_NAME = "student_course";
 	public static final String STUDYPLAN_DB_NAME = "studyplan";
+	public static final String CFU = "cfu";
+	public static final String COURSE_NAME = "courseName";
+	public static final String COURSE_ID = "courseId";
+	
+	
 	
 	private MongoCollection<Document> courseCollection;
 	
