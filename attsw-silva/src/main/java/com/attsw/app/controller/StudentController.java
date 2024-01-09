@@ -34,7 +34,7 @@ import com.attsw.app.view.StudyPlanView;
 		return student;
 	}
 
-	public void insertCourseIntoStudyPlan(Student student, Course course) {
+	public Student insertCourseIntoStudyPlan(Student student, Course course) {
 		
 		if (courseRepository.findById(course.getCourseId()) == null)
 			studyPlanView.showError("Course not found");
@@ -42,11 +42,13 @@ import com.attsw.app.view.StudyPlanView;
 		if (student.getStudyPlan().stream()
 				.filter(c -> c.getCourseId() == course.getCourseId())
 				.count() > 0)
-			return ;
+			return null;
 		
 		student.addCourse(course);
 		studentRepository.updateStudyPlan(student);
 		studyPlanView.CourseAdded(course);
+		
+		return student;
 		
 	}
 
@@ -80,6 +82,10 @@ import com.attsw.app.view.StudyPlanView;
 		}
 		return student;
 		
+	}
+	
+	public Course findCourseByNameAndCfu(String name, int cfu) {
+		return courseRepository.findByNameAndCfu(name, cfu);
 	}
 
 

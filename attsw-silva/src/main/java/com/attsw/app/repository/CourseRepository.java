@@ -11,4 +11,6 @@ public interface CourseRepository {
 	
 	public Course findById(String id);
 	
+	public Course findByNameAndCfu(String name, int cfu);
+	
 }

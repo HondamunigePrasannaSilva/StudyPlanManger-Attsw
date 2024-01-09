@@ -51,6 +51,16 @@ public class CourseMongoRepository implements CourseRepository {
 				Integer.parseInt(d.getString("cfu")));
 		return course;
 	}
+	@Override
+	public Course findByNameAndCfu(String name, int cfu) {
+		// TODO Auto-generated method stub
+		Course course = StreamSupport.stream(courseCollection.find().spliterator(), false)
+				.map(d -> fromDocumentToStudent(d)).filter(c -> c.getCourseName().equals(name) && c.getCfu() == cfu)
+				.findFirst().orElse(null);
+	    return course;
+	    
+		
+	}
 	
 	
 	

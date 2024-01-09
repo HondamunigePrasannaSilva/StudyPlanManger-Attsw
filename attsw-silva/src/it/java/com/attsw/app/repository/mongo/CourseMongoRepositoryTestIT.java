@@ -72,6 +72,14 @@ public class CourseMongoRepositoryTestIT {
 			.getCourseId().equals("1"));
 		
 	}
+	
+	@Test 
+	public void testFineByNameAndCfu() {
+		Document c1 = addCourseToCollection("1", "Course1", "6");
+		Document c2 = addCourseToCollection("2", "Course2", "9");
+
+		assertTrue(CourseMongoRepository.findByNameAndCfu("Course1", 6).getCourseId().equals("1"));
+	}
 	@Test
 	public void testFindByIdWhenIdDoesNotExist() {
         assertTrue(CourseMongoRepository.findById("1") == null);

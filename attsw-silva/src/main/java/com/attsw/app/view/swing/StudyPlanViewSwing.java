@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import com.attsw.app.controller.StudentController;
 import com.attsw.app.model.Course;
 import com.attsw.app.model.Student;
+import com.attsw.app.view.StudyPlanView;
 
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
@@ -24,10 +25,11 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class StudyPlanViewSwing extends JFrame {
+public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -44,6 +46,8 @@ public class StudyPlanViewSwing extends JFrame {
 	private JLabel lbErrorMsg;
 	private DefaultListModel<Course> courseList;
 	private JList<Course> clist;
+	
+	private Student student;
 	
 	/**
 	 * Launch the application.
@@ -98,16 +102,15 @@ public class StudyPlanViewSwing extends JFrame {
 		btnLogin.setEnabled(false);
 		
 		btnLogin.addActionListener(e -> {
-			Student student = studentcontroller.find(txtStudentId.getText());
+			student = studentcontroller.find(txtStudentId.getText());
 			if (student != null) 
 			{
-				txtCourseName.setEnabled(true);
-				txtcfu.setEnabled(true);
 				
 				btnRemoveSelectedCourse.setEnabled(true);
 				scrollPane.setEnabled(true);
 				btnLogin.setEnabled(false);
 				txtStudentId.setEnabled(false);
+				showStudyPlan(student.getStudyPlan());
 			}
 			else
 				lbErrorMsg.setText("Student not found");
@@ -127,7 +130,7 @@ public class StudyPlanViewSwing extends JFrame {
 		lblStudyPlan.setName("lblStudyPlan");
 		
 		txtCourseName = new JTextField();
-		txtCourseName.setEnabled(false);
+		txtCourseName.setEnabled(true);
 		txtCourseName.setBounds(239, 355, 208, 33);
 		contentPane.add(txtCourseName);
 		txtCourseName.setColumns(10);
@@ -151,25 +154,67 @@ public class StudyPlanViewSwing extends JFrame {
 		lblCfu.setBounds(137, 439, 70, 15);
 		contentPane.add(lblCfu);
 		lblCfu.setName("lblCfu");
+		KeyAdapter btnAddEnabler = new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				btnInsertNewCourse.setEnabled(
+					!txtCourseName.getText().trim().isEmpty() && !txtcfu.getText().trim().isEmpty()
+				);
+			}
+		};
+		txtCourseName.addKeyListener(btnAddEnabler);
+		
 		
 		txtcfu = new JTextField();
-		txtcfu.setEnabled(false);
+		txtcfu.setEnabled(true);
+		
 		txtcfu.setBounds(239, 430, 208, 33);
 		contentPane.add(txtcfu);
 		txtcfu.setColumns(10);
 		txtcfu.setName("txtcfu");
-		
+		txtcfu.addKeyListener(btnAddEnabler);
 		btnInsertNewCourse = new JButton("INSERT NEW COURSE");
 		btnInsertNewCourse.setEnabled(false);
 		btnInsertNewCourse.setBounds(104, 543, 186, 25);
 		contentPane.add(btnInsertNewCourse);
 		btnInsertNewCourse.setName("btnInsertNewCourse");
+		btnInsertNewCourse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Course c = studentcontroller.findCourseByNameAndCfu(txtCourseName.getText(), Integer.parseInt(txtcfu.getText()));
+				studentcontroller.insertCourseIntoStudyPlan(student, c);
+				CourseAdded(c);
+				
+				
+			}
+		});
+		
+	
 		
 		btnUpdateCourse = new JButton("UPDATE COURSE");
 		btnUpdateCourse.setEnabled(false);
 		btnUpdateCourse.setBounds(319, 543, 166, 25);
 		contentPane.add(btnUpdateCourse);
 		btnUpdateCourse.setName("btnUpdateCourse");
+		btnUpdateCourse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!clist.isSelectionEmpty())
+				{
+					Course c = studentcontroller.findCourseByNameAndCfu(txtCourseName.getText(),
+							Integer.parseInt(txtcfu.getText()));
+					Course c1 = studentcontroller.findCourseByNameAndCfu(clist.getSelectedValue().getCourseName(),
+							clist.getSelectedValue().getCfu());
+					
+					Student s = studentcontroller.updateStudyPlan(student, c1, c);
+					
+					clist.clearSelection();					
+					CourseAdded(c);
+					CourseRemoved(c1);
+				
+				}
+				
+
+			}
+		});
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
@@ -202,7 +247,19 @@ public class StudyPlanViewSwing extends JFrame {
 		clist.addListSelectionListener(e -> {
 			btnRemoveSelectedCourse.setEnabled(!clist.isSelectionEmpty());
 			btnUpdateCourse.setEnabled(!clist.isSelectionEmpty());
+			if (clist.isSelectionEmpty()) {
+				txtCourseName.setText("");
+				txtcfu.setText("");
+			} else {
+				txtCourseName.setText(clist.getSelectedValue().getCourseName());
+				txtcfu.setText(String.valueOf(clist.getSelectedValue().getCfu()));
+				txtCourseName.setEnabled(true);
+				txtcfu.setEnabled(true);
+			}
+			
 		});
+		
+		
 		clist.setName("CourseList");
 		scrollPane.setViewportView(clist);
 		
@@ -228,6 +285,18 @@ public class StudyPlanViewSwing extends JFrame {
 		btnRemoveSelectedCourse.setBounds(768, 574, 246, 25);
 		contentPane.add(btnRemoveSelectedCourse);
 		btnRemoveSelectedCourse.setName("btnRemoveSelectedCourse");
+		btnRemoveSelectedCourse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// get the selected item from the scrol pane
+				String coursename = clist.getSelectedValue().getCourseName();
+				String cfu = String.valueOf(clist.getSelectedValue().getCfu());
+				Course c = studentcontroller.findCourseByNameAndCfu(coursename, Integer.parseInt(cfu));
+			    studentcontroller.removeCourseFromStudyPlan(student, c);
+				CourseRemoved(c);
+				
+				
+			}
+		});
 	}
 
 	public void setSudyPlanController(StudentController studentcontroller) {
@@ -235,9 +304,48 @@ public class StudyPlanViewSwing extends JFrame {
 		this.studentcontroller = studentcontroller;
 		
 	}
+	
+	
 
 	DefaultListModel<Course> getCourseList() {
 		
 		return courseList;
 	}
+
+	@Override
+	public void showStudyPlan(List<Course> courses) {
+		// TODO Auto-generated method stub
+		// add each course to the list
+		courseList.clear();
+		courses.forEach(courseList::addElement);
+		resetLabel();
+		
+	}
+
+	@Override
+	public void showError(String message) {
+		lbErrorMsg.setText(message);
+		
+	}
+
+	@Override
+	public void CourseAdded(Course course) {
+		// TODO Auto-generated method stub
+		courseList.addElement(course);
+		resetLabel();
+		
+	}
+
+	@Override
+	public void CourseRemoved(Course course) {
+		
+		courseList.removeElement(course);
+		resetLabel();
+		
+	}
+	private void resetLabel()
+	{
+		lbErrorMsg.setText(" ");
+	}
+	
 }
