@@ -104,6 +104,22 @@ public class StudentControllerTestIT {
 		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
 				.containsExactly("2");
 	}
+	
+	@Test
+	public void testUpdateStudyPlan() {
+
+		Document d = addStudentWithStudyPlan("1");
+		Student s = fromDocumentToStudent(d);
+	
+		Course c = new Course("3", "Sistemi Operativi", 12);
+		Document course = addCourseToDB("3", "Sistemi Operativi", "12");
+		Course c1 = new Course("2", "Fisica", 12);
+		
+		studentController.updateStudyPlan(s,c1, c);
+
+		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
+				.containsExactlyInAnyOrder("1", "3");
+	}
 
 	// ---------------------------------------------------------------------------------
 	private Document addCourseToDB(String id, String name, String cfu) {

@@ -44,6 +44,7 @@ public class StudentMongoRepositoryTestIT {
 				mongo.getFirstMappedPort()));
 	
 		studentMongoRepository = new StudentMongoRepository(client);
+		
 		MongoDatabase database = client.getDatabase(STUDYPLAN_DB_NAME);
 		database.drop();
 		studentCollection = database.getCollection(STUDENT_COLLECTION_NAME);

@@ -72,15 +72,18 @@ import com.attsw.app.view.StudyPlanView;
 			return student;
 		}
 		ArrayList<Course> sp = student.getStudyPlan();
+
 		if(sp.removeIf(c -> c.getCourseId() == course1.getCourseId()))	
 		{	
-			studentRepository.updateStudyPlan(student);
 			student.addCourse(courseToAdd);		
+			
+			studentRepository.updateStudyPlan(student);
 			studyPlanView.CourseRemoved(course1);
 			studyPlanView.CourseAdded(courseToAdd);
 			
 		}
-		return student;
+		
+		return studentRepository.findById(student.getId());
 		
 	}
 	

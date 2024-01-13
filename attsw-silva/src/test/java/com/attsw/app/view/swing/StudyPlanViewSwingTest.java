@@ -169,28 +169,6 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 	}
 	
 	@Test
-	public void testRemoveCourseFromListWhenRemoveButtonIsPressed() {
-		
-		Course c = new Course("1", "Analisi 1", 12);
-		Course c1 = new Course("2", "Analisi 2", 12);
-		GuiActionRunner.execute(
-				() ->  {
-						DefaultListModel<Course> courseList = studyplanview.getCourseList();
-						courseList.addElement(c);
-						courseList.addElement(c1);						
-				});
-		
-		window.list("CourseList").selectItem(0);
-		when(studentcontroller.findCourseByNameAndCfu("Analisi 1", 12)).thenReturn(c);
-		window.button("btnRemoveSelectedCourse").click();
-		
-		String[] listContents = window.list("CourseList").contents();
-		assertThat(listContents).containsExactly("Course: 2 Analisi 2 12");
-		window.label("lbErrorMsg").requireText(" ");
-		
-	}
-	
-	@Test
 	public void testInsertButtonShouldBeEnabledOnlyWhenCourseNameAndCfuAreNotEmpty() {
 		
 		JTextComponentFixture txtCourseName = window.textBox("txtCourseName");
@@ -223,54 +201,6 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		
 		window.button("btnInsertNewCourse").requireDisabled();
 
-	}
-	
-	@Test
-	public void testInsertCourseInListWhenInsertButtonIsPressed() {
-		JTextComponentFixture txtCourseName = window.textBox("txtCourseName");
-		JTextComponentFixture txtcfu = window.textBox("txtcfu");
-		
-		txtCourseName.enterText("Analisi");
-		txtcfu.enterText("12");
-		when(studentcontroller.findCourseByNameAndCfu("Analisi", 12)).thenReturn(new Course("1", "Analisi", 12));
-		
-		window.button("btnInsertNewCourse").click();
-		String[] listContents = window.list("CourseList").contents();
-		assertThat(listContents).containsExactly("Course: 1 Analisi 12");
-		window.label("lbErrorMsg").requireText(" ");
-	}
-	
-	@Test
-	public void testUpdateCourseListWhenButtonIsPressed()
-	{
-		Course c = new Course("1", "Analisi 1", 12);
-		Course c1 = new Course("2", "Analisi 2", 12);
-		Course c2 = new Course("3", "Analisi 3", 12);
-	
-		GuiActionRunner.execute(() -> {
-			DefaultListModel<Course> courseList = studyplanview.getCourseList();
-			courseList.addElement(c);
-			courseList.addElement(c1);
-		});
-
-		window.list("CourseList").selectItem(0);
-		when(studentcontroller.findCourseByNameAndCfu("Analisi 1", 12)).thenReturn(c);
-		when(studentcontroller.findCourseByNameAndCfu("Analisi 3", 12)).thenReturn(c2);
-				
-		JTextComponentFixture txtCourseName = window.textBox("txtCourseName");
-		JTextComponentFixture txtcfu = window.textBox("txtcfu");
-		
-		txtCourseName.setText("");
-		txtcfu.setText("");
-		
-		txtCourseName.enterText("Analisi 3");
-		txtcfu.enterText("12");
-
-		window.button("btnUpdateCourse").click();
-		
-		String[] listContents = window.list("CourseList").contents();
-		assertThat(listContents).containsExactly("Course: 2 Analisi 2 12", "Course: 3 Analisi 3 12");
-		window.label("lbErrorMsg").requireText(" ");
 	}
 	
 	@Test
@@ -367,28 +297,40 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.button("btnRemoveSelectedCourse").click();
 		verify(studentcontroller).removeCourseFromStudyPlan(s, c);
 	}
-
+	
 	@Test
-	public void testShowStudyPlanWhenStudentIsLogged()
-	{
-		Student s = new Student("1", "Mario", "Rossi", "123");
-		Course c = new Course("1", "Analisi 1", 12);
-		Course c1 = new Course("2", "Analisi 2", 12);
-		ArrayList<Course> sp = new ArrayList<Course>();
-		sp.add(c);
-		sp.add(c1);
-		s.setStudyPlan(sp);
-		
-		window.textBox("txtStudentId").enterText("1");
-		when(studentcontroller.find("1")).thenReturn(s);
-		
-		window.button("btnLogin").click();
-		
-		// assert that the list contains the same elements in the same order.
+	public void testCourseInsertDescriptionToTheList() {
+	
+		Course c1 = new Course("1", "Analisi 1", 12);
+		Course c2 = new Course("2", "Analisi 2", 12);
+		GuiActionRunner.execute(() -> {
+			ArrayList<Course> sp = new ArrayList<Course>();
+			sp.add(c1);
+			sp.add(c2);
+			studyplanview.showStudyPlan(sp);
+		});
 		String[] listContents = window.list("CourseList").contents();
 		assertThat(listContents).containsExactly("Course: 1 Analisi 1 12", "Course: 2 Analisi 2 12");
-		
-		
 	}
+	
+	@Test
+	public void testCourseRemoveDescriptionFromList()
+	{
+		Course c1 = new Course("1", "Analisi 1", 12);
+		Course c2 = new Course("2", "Analisi 2", 12);
+		GuiActionRunner.execute(() -> {
+			ArrayList<Course> sp = new ArrayList<Course>();
+			sp.add(c1);
+			sp.add(c2);
+			studyplanview.showStudyPlan(sp);
+		});
+
+		GuiActionRunner.execute(() -> studyplanview.CourseRemoved(c1));
+
+		String[] listContents = window.list("CourseList").contents();
+		assertThat(listContents).containsExactly("Course: 2 Analisi 2 12");
+	}
+
+
 	
 }

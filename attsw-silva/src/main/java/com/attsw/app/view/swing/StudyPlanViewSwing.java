@@ -180,9 +180,17 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnInsertNewCourse.setName("btnInsertNewCourse");
 		btnInsertNewCourse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+	
 				Course c = studentcontroller.findCourseByNameAndCfu(txtCourseName.getText(), Integer.parseInt(txtcfu.getText()));
-				studentcontroller.insertCourseIntoStudyPlan(student, c);
-				CourseAdded(c);
+				
+				if (c == null)
+					showError("Course not found");
+				else
+				{	
+					studentcontroller.insertCourseIntoStudyPlan(student, c);
+					CourseAdded(c);
+				}
+					
 				
 				
 			}
@@ -205,11 +213,12 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 							clist.getSelectedValue().getCfu());
 					
 					Student s = studentcontroller.updateStudyPlan(student, c1, c);
-					
-					clist.clearSelection();					
-					CourseAdded(c);
-					CourseRemoved(c1);
-				
+					if (s == null)
+                        showError("Course not found");
+					else
+					{	
+						showStudyPlan(s.getStudyPlan());
+					}
 				}
 				
 
