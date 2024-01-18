@@ -88,6 +88,11 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>0.8.6</version>
+           <configuration>
+                    <excludes>
+                        <exclude>**/StudyPlanManager.*</exclude>
+                    </excludes>
+                </configuration>
           <executions>
             <execution>
               <goals>
@@ -205,11 +210,6 @@
             <!-- configured in pluginManagement -->
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <configuration>
-            <excludes>
-              <exclude>**/swing/*</exclude>
-            </excludes>
-          </configuration>
           </plugin>
         </plugins>
       </build>
