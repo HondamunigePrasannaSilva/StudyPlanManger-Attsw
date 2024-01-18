@@ -204,6 +204,24 @@ public class StudyPlanControllerTest {
 		verify(studyPlanView).showError("Course not found");
 	}
 	
+	@Test
+	public void testUpdateStudyPlanWhenCourseIsNotPresentInStudyPlan() {
+
+		Student student = createStudentWithStudyPlan();
+		Course course1 = new Course("3", "Analisi 2", 12);
+		Course course2 = new Course("4", "Analisi 2", 6);
+
+		when(courseRepository.findById("2")).thenReturn(course2);
+		when(courseRepository.findByNameAndCfu("Analisi 2", 6)).thenReturn(course2);
+		when(courseRepository.findByNameAndCfu("Analisi 2", 12)).thenReturn(course1);
+
+		Student s = studentController.updateStudyPlan(student, "Analisi 2", 12, "Analisi 2", 6);
+
+		assertThat(s.getStudyPlan()).extracting(Course::getCourseId).containsExactly("1");
+
+		verify(studyPlanView).showError("Course not in study plan");
+	}
+	
 
 	// --------------------------- PRIVATE METHODS ------------------------------------
 	

@@ -182,15 +182,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	
 				Course c = studentcontroller.findCourseByNameAndCfu(txtCourseName.getText(), Integer.parseInt(txtcfu.getText()));
 				studentcontroller.insertCourseIntoStudyPlan(student, c);
-				//if (c == null)
-				//	showError("Course not found");
-				//else
-				//{	
-					
-				//}
-					
-				
-				
+
 			}
 		});
 		
@@ -314,10 +306,9 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	@Override
 	public void showStudyPlan(List<Course> courses) {
 		// TODO Auto-generated method stub
-		// add each course to the list
 		courseList.clear();
 		courses.forEach(courseList::addElement);
-		//resetLabel();
+
 		
 	}
 

@@ -144,6 +144,14 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 	}
 	
 	@Test
+	public void testShowErrorShouldShowTheMessageInTheErrorLabel() {
+		
+		GuiActionRunner.execute(
+			() -> studyplanview.showError("error message")
+		);
+		window.label("lbErrorMsg").requireText("error message");
+	}
+	@Test
 	public void testUpdateButtonShouldBeEnabledOnlyWhenACourseIsSelected() {
 
 		GuiActionRunner.execute(() -> studyplanview.getCourseList().addElement(new Course("1", "Analisi", 12)));
