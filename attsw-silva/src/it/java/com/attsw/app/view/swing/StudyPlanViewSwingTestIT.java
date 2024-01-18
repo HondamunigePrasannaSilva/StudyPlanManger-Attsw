@@ -129,7 +129,11 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 		assertThat(window.list("CourseList").contents()).containsExactlyInAnyOrder(course1.toString(), course2.toString());
 
 	}
-
+	
+	private void prova()
+	{
+		
+	}
 
 	@Test @GUITest
 	public void testUpdateStudyPlan()
