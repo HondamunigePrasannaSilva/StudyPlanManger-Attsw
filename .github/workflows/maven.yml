@@ -17,11 +17,11 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest #${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
         matrix:
         #os: [ubuntu-latest, macos-latest, windows-latest]
-            #os: [ubuntu-latest]
+            os: [ubuntu-latest]
             additional-maven-args: >
               -Pcoveralls
               -DrepoToken=$COVERALLS_REPO_TOKEN
@@ -43,7 +43,8 @@ jobs:
             
     - name: Build with Maven
       #run: mvn -f ./attsw-silva/pom.xml clean verify
-      run: xvfb-run mvn verify ${{ matrix.additional-maven-args }}
+      run: >
+        xvfb-run mvn verify ${{ matrix.additional-maven-args }}
       working-directory: ${{ env.workdir }}
       env: 
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}

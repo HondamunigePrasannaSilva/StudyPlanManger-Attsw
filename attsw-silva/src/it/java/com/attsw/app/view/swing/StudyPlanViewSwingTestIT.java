@@ -130,10 +130,7 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 
 	}
 	
-	private void prova()
-	{
-		
-	}
+	
 
 	@Test @GUITest
 	public void testUpdateStudyPlan()
