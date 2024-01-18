@@ -52,7 +52,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -66,7 +66,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the frame.
@@ -87,8 +87,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		txtStudentId.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				btnLogin.setEnabled(!txtStudentId.getText().isEmpty() &&
-						txtStudentId.getText().trim().length() > 0);
+				btnLogin.setEnabled(!txtStudentId.getText().isEmpty() && txtStudentId.getText().trim().length() > 0);
 			}
 		});
 		txtStudentId.setHorizontalAlignment(SwingConstants.CENTER);
@@ -182,14 +181,13 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 			public void actionPerformed(ActionEvent e) {
 	
 				Course c = studentcontroller.findCourseByNameAndCfu(txtCourseName.getText(), Integer.parseInt(txtcfu.getText()));
-				
-				if (c == null)
-					showError("Course not found");
-				else
-				{	
-					studentcontroller.insertCourseIntoStudyPlan(student, c);
-					CourseAdded(c);
-				}
+				studentcontroller.insertCourseIntoStudyPlan(student, c);
+				//if (c == null)
+				//	showError("Course not found");
+				//else
+				//{	
+					
+				//}
 					
 				
 				
@@ -205,21 +203,13 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnUpdateCourse.setName("btnUpdateCourse");
 		btnUpdateCourse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!clist.isSelectionEmpty())
-				{
-					Course c = studentcontroller.findCourseByNameAndCfu(txtCourseName.getText(),
+				
+				Student s = studentcontroller.updateStudyPlan(student, clist.getSelectedValue().getCourseName(),
+							clist.getSelectedValue().getCfu(), txtCourseName.getText(),
 							Integer.parseInt(txtcfu.getText()));
-					Course c1 = studentcontroller.findCourseByNameAndCfu(clist.getSelectedValue().getCourseName(),
-							clist.getSelectedValue().getCfu());
 					
-					Student s = studentcontroller.updateStudyPlan(student, c1, c);
-					if (s == null)
-                        showError("Course not found");
-					else
-					{	
-						showStudyPlan(s.getStudyPlan());
-					}
-				}
+					showStudyPlan(s.getStudyPlan());
+				
 				
 
 			}
@@ -301,7 +291,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 				String cfu = String.valueOf(clist.getSelectedValue().getCfu());
 				Course c = studentcontroller.findCourseByNameAndCfu(coursename, Integer.parseInt(cfu));
 			    studentcontroller.removeCourseFromStudyPlan(student, c);
-				CourseRemoved(c);
+				
 				
 				
 			}
@@ -327,7 +317,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		// add each course to the list
 		courseList.clear();
 		courses.forEach(courseList::addElement);
-		resetLabel();
+		//resetLabel();
 		
 	}
 
@@ -339,7 +329,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 
 	@Override
 	public void CourseAdded(Course course) {
-		// TODO Auto-generated method stub
+		
 		courseList.addElement(course);
 		resetLabel();
 		

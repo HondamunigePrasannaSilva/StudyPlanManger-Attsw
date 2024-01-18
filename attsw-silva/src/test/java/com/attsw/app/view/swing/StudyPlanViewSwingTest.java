@@ -4,7 +4,6 @@
 package com.attsw.app.view.swing;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -235,21 +234,14 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		Student s = new Student("1", "Mario", "Rossi", "123");
 		Course c = new Course("1", "Analisi 1", 12);
 		Course c1 = new Course("2", "Analisi 2", 12);
+		
 		ArrayList<Course> sp = new ArrayList<Course>();
 		sp.add(c);
-		sp.add(c1);
 		s.setStudyPlan(sp);
 		
 		window.textBox("txtStudentId").enterText("1");
 		when(studentcontroller.find("1")).thenReturn(s);
 		window.button("btnLogin").click();
-		
-		GuiActionRunner.execute(() -> {
-			DefaultListModel<Course> courseList = studyplanview.getCourseList();
-			courseList.addElement(c);
-			
-		});
-        
 		window.list("CourseList").selectItem(0);
         
 		JTextComponentFixture txtCourseName = window.textBox("txtCourseName");
@@ -260,13 +252,11 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		
 		txtCourseName.enterText("Analisi 2");
 		txtcfu.enterText("12");
-		when(studentcontroller.findCourseByNameAndCfu("Analisi 1", 12)).thenReturn(c);
-		when(studentcontroller.findCourseByNameAndCfu("Analisi 2", 12)).thenReturn(c1);
-
-		when(studentcontroller.updateStudyPlan(s, c, c1)).thenReturn(s);
+		
+		when(studentcontroller.updateStudyPlan(s, "Analisi 1", 12, "Analisi 2", 12)).thenReturn(s);
 
 		window.button("btnUpdateCourse").click();
-		verify(studentcontroller).updateStudyPlan(s, c, c1);
+		verify(studentcontroller).updateStudyPlan(s, "Analisi 1", 12, "Analisi 2", 12);
 	}
 	
 	@Test

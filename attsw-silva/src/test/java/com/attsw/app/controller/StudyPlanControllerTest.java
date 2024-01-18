@@ -81,7 +81,9 @@ public class StudyPlanControllerTest {
 
 		when(courseRepository.findById("1")).thenReturn(course);
 		studentController.insertCourseIntoStudyPlan(student, course);
-		assertFalse(student.getStudyPlan().contains(course));	
+		
+		assertThat(student.getStudyPlan()).extracting(Course::getCourseId).containsExactlyInAnyOrder("1");
+			
 	}
 
 	@Test
@@ -165,8 +167,13 @@ public class StudyPlanControllerTest {
 
 		when(courseRepository.findById("2")).thenReturn(course2);
 
-		Student s = studentController.updateStudyPlan(student,course1,course2);
- 
+		when(courseRepository.findByNameAndCfu("Analisi 1", 6)).thenReturn(course2);
+		when(courseRepository.findByNameAndCfu("Analisi 1", 12)).thenReturn(course1);
+		
+		
+		Student s = studentController.updateStudyPlan(student,"Analisi 1",12 ,"Analisi 1", 6);
+		
+		
 		assertTrue(s.getStudyPlan().contains(course2));
 		assertFalse(s.getStudyPlan().contains(course1));
 		
@@ -185,10 +192,11 @@ public class StudyPlanControllerTest {
 		Course course2 = new Course("2", "Analisi 1", 6);
 
 		when(courseRepository.findById("2")).thenReturn(null);
+		when(courseRepository.findByNameAndCfu("Analisi 1", 6)).thenReturn(null);
+		when(courseRepository.findByNameAndCfu("Analisi 1", 12)).thenReturn(course1);
+		
+		Student s = studentController.updateStudyPlan(student,"Analisi 1", 12,"Analisi 1", 6);
 
-		Student s = studentController.updateStudyPlan(student,course1,course2);
-
-		assertFalse(s.getStudyPlan().contains(course2));
 		assertThat(s.getStudyPlan())
 			.extracting(Course::getCourseId)
 			.containsExactly("1");

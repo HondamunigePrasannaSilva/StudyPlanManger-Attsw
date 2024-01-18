@@ -1,7 +1,6 @@
 package com.attsw.app.repository.mongo;
 
-import static com.attsw.app.repository.mongo.CourseMongoRepository.STUDENT_COURSE_COLLECTION_NAME;
-import static com.attsw.app.repository.mongo.CourseMongoRepository.STUDYPLAN_DB_NAME;
+
 import static com.attsw.app.repository.mongo.CourseMongoRepository.COURSE_ID;
 import static com.attsw.app.repository.mongo.CourseMongoRepository.COURSE_NAME;
 import static com.attsw.app.repository.mongo.CourseMongoRepository.CFU;
@@ -31,6 +30,10 @@ public class CourseMongoRepositoryTestIT {
 	private CourseMongoRepository CourseMongoRepository;
 	private MongoCollection<Document> CourseCollection;
 	
+	public static final String STUDENT_COLLECTION_NAME = "student";
+	public static final String STUDENT_COURSE_COLLECTION_NAME = "student_course";
+	public static final String STUDYPLAN_DB_NAME = "studyplan";
+	
 	@Before
 	public void setup() {
 	
@@ -39,7 +42,7 @@ public class CourseMongoRepositoryTestIT {
 				mongo.getContainerIpAddress(),
 				mongo.getFirstMappedPort()));
 	
-		CourseMongoRepository = new CourseMongoRepository(client);
+		CourseMongoRepository = new CourseMongoRepository(client, STUDYPLAN_DB_NAME, STUDENT_COURSE_COLLECTION_NAME);
 		MongoDatabase database = client.getDatabase(STUDYPLAN_DB_NAME);
 		database.drop();
 		CourseCollection = database.getCollection(STUDENT_COURSE_COLLECTION_NAME);

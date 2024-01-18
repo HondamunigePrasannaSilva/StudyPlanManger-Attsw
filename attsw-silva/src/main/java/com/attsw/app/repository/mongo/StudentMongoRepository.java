@@ -18,15 +18,14 @@ import com.mongodb.MongoClient;
 
 
 public class StudentMongoRepository implements StudentRepository{
-	public static final String STUDENT_COLLECTION_NAME = "student";
-	public static final String STUDYPLAN_DB_NAME = "studyplan";
+
 	
 	private MongoCollection<Document> studentCollection;
 	
-	public StudentMongoRepository(MongoClient client) {
+	public StudentMongoRepository(MongoClient client, String dbName, String collectionName) {
 		studentCollection = client
-				.getDatabase(STUDYPLAN_DB_NAME)
-				.getCollection(STUDENT_COLLECTION_NAME);
+				.getDatabase(dbName)
+				.getCollection(collectionName);
 	}
 	
 	@Override
@@ -40,7 +39,7 @@ public class StudentMongoRepository implements StudentRepository{
 	@Override
 	public Student findById(String id) {
 	
-		Document d = studentCollection.find(Filters.eq("id", id)).first();
+		Document d = studentCollection.find(Filters.eq("mnumber", id)).first();
 		
 		if (d == null)
             return null;
@@ -50,7 +49,7 @@ public class StudentMongoRepository implements StudentRepository{
 
 	@Override
 	public void updateStudyPlan(Student student) {
-		studentCollection.replaceOne(Filters.eq("id", student.getId()), fromStudentToDocument(student));
+		studentCollection.replaceOne(Filters.eq("mnumber", student.getId()), fromStudentToDocument(student));
 		
 	}
 	
@@ -64,7 +63,7 @@ public class StudentMongoRepository implements StudentRepository{
 					.append("cfu", course.getCfu()));
 		}
 		
-		Document d = new Document("id", student.getId()).append("name", student.getName())
+		Document d = new Document("mnumber", student.getId()).append("name", student.getName())
 				.append("surname", student.getSurname()).append("idCdl", student.getIdCdl())
 				.append("studyPlan", studyPlan);
 		
@@ -75,7 +74,7 @@ public class StudentMongoRepository implements StudentRepository{
 	private Student fromDocumentToStudent(Document d) {
 		
 		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
-		Student s = new Student(d.get("id").toString(), 
+		Student s = new Student(d.get("mnumber").toString(), 
 								d.get("name").toString(), 
 								d.get("surname").toString(),
 								d.get("idCdl").toString());
@@ -83,7 +82,7 @@ public class StudentMongoRepository implements StudentRepository{
 		for (Document document : studyPlan) {
 			studyPlanList.add(new Course(document.get("courseId").toString(),
 					                     document.get("courseName").toString(),
-					                     (int) document.get("cfu")));
+					                     Integer.parseInt(document.get("cfu").toString())));
 		}
 		s.setStudyPlan(studyPlanList);
 		

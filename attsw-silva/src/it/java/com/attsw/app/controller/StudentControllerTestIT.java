@@ -1,8 +1,6 @@
 package com.attsw.app.controller;
 
-import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDENT_COLLECTION_NAME;
-import static com.attsw.app.repository.mongo.CourseMongoRepository.STUDENT_COURSE_COLLECTION_NAME;
-import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDYPLAN_DB_NAME;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -44,6 +42,10 @@ public class StudentControllerTestIT {
 	@Mock
 	private StudyPlanView studyPlanView;
 	
+	public static final String STUDENT_COLLECTION_NAME = "student";
+	public static final String STUDENT_COURSE_COLLECTION_NAME = "student_course";
+	public static final String STUDYPLAN_DB_NAME = "studyplan";
+	
 	@Before
 	public void setup() {
 	
@@ -52,8 +54,8 @@ public class StudentControllerTestIT {
 				mongo.getContainerIpAddress(),
 				mongo.getFirstMappedPort()));
 	
-		studentMongoRepository = new StudentMongoRepository(client);
-		courseMongoRepository = new CourseMongoRepository(client);
+		studentMongoRepository = new StudentMongoRepository(client, STUDYPLAN_DB_NAME, STUDENT_COLLECTION_NAME);
+		courseMongoRepository = new CourseMongoRepository(client, STUDYPLAN_DB_NAME, STUDENT_COURSE_COLLECTION_NAME);
 		
 		MongoDatabase database = client.getDatabase(STUDYPLAN_DB_NAME);
 		database.drop();
@@ -75,7 +77,7 @@ public class StudentControllerTestIT {
 	public void testFindStudentById() {
 		Document d  = addStudentWithStudyPlan("1");
 		Student student = studentController.find("1");
-		assertThat(student.getId()).isEqualTo(d.get("id"));	
+		assertThat(student.getId()).isEqualTo(d.get("mnumber"));	
 	}
 
 	@Test
@@ -115,12 +117,11 @@ public class StudentControllerTestIT {
 		Document course = addCourseToDB("3", "Sistemi Operativi", "12");
 		Course c1 = new Course("2", "Fisica", 12);
 		
-		studentController.updateStudyPlan(s,c1, c);
-
+		studentController.updateStudyPlan(s,"Fisica", 12, "Sistemi Operativi", 12);
 		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
 				.containsExactlyInAnyOrder("1", "3");
 	}
-
+	
 	// ---------------------------------------------------------------------------------
 	private Document addCourseToDB(String id, String name, String cfu) {
 
@@ -136,7 +137,7 @@ public class StudentControllerTestIT {
 	private Document addStudentWithStudyPlan(String id){
 		
 		Document d = new Document()
-                .append("id", id)
+                .append("mnumber", id)
                 .append("name", "Mario")
                 .append("surname", "Rossi")
                 .append("idCdl", "1")
@@ -157,10 +158,11 @@ public class StudentControllerTestIT {
 		return d;
 		
 	}
+	
 	private Student fromDocumentToStudent(Document d) {
 
 		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
-		Student s = new Student(d.get("id").toString(), 
+		Student s = new Student(d.get("mnumber").toString(), 
 								d.get("name").toString(), 
 								d.get("surname").toString(),
 								d.get("idCdl").toString());

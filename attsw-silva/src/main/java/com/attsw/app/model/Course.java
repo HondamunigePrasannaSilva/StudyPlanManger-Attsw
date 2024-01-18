@@ -33,5 +33,12 @@ public class Course {
 		// TODO Auto-generated method stub
 		return "Course: " + courseId + " " + courseName + " " + cfu;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+	
+		Course c = (Course) obj;
+		return this.courseId.equals(c.getCourseId());
+	
+	}
 }

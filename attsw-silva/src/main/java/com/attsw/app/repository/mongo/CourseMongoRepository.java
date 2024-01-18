@@ -13,8 +13,6 @@ import com.mongodb.client.MongoCollection;
 
 public class CourseMongoRepository implements CourseRepository {
 	
-	public static final String STUDENT_COURSE_COLLECTION_NAME = "student_course";
-	public static final String STUDYPLAN_DB_NAME = "studyplan";
 	public static final String CFU = "cfu";
 	public static final String COURSE_NAME = "courseName";
 	public static final String COURSE_ID = "courseId";
@@ -23,10 +21,8 @@ public class CourseMongoRepository implements CourseRepository {
 	
 	private MongoCollection<Document> courseCollection;
 	
-	public CourseMongoRepository(MongoClient client) {
-		courseCollection = client
-				.getDatabase(STUDYPLAN_DB_NAME)
-				.getCollection(STUDENT_COURSE_COLLECTION_NAME);
+	public CourseMongoRepository(MongoClient client, String dbName, String collectionName) {
+		courseCollection = client.getDatabase(dbName).getCollection(collectionName);
 	}
 	@Override
 	public List<Course> findAll() {
@@ -53,7 +49,6 @@ public class CourseMongoRepository implements CourseRepository {
 	}
 	@Override
 	public Course findByNameAndCfu(String name, int cfu) {
-		// TODO Auto-generated method stub
 		Course course = StreamSupport.stream(courseCollection.find().spliterator(), false)
 				.map(d -> fromDocumentToStudent(d)).filter(c -> c.getCourseName().equals(name) && c.getCfu() == cfu)
 				.findFirst().orElse(null);

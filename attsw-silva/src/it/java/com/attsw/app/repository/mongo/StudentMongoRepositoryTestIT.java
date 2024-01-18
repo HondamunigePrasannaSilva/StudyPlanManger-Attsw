@@ -1,7 +1,6 @@
 package com.attsw.app.repository.mongo;
 
-import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDENT_COLLECTION_NAME;
-import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDYPLAN_DB_NAME;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +33,8 @@ public class StudentMongoRepositoryTestIT {
 	private StudentMongoRepository studentMongoRepository;
 	private MongoCollection<Document> studentCollection;
 	
+	public static final String STUDENT_COLLECTION_NAME = "student";
+	public static final String STUDYPLAN_DB_NAME = "studyplan";
 	
 	@Before
 	public void setup() {
@@ -43,7 +44,7 @@ public class StudentMongoRepositoryTestIT {
 				mongo.getContainerIpAddress(),
 				mongo.getFirstMappedPort()));
 	
-		studentMongoRepository = new StudentMongoRepository(client);
+		studentMongoRepository = new StudentMongoRepository(client, STUDYPLAN_DB_NAME, STUDENT_COLLECTION_NAME);
 		
 		MongoDatabase database = client.getDatabase(STUDYPLAN_DB_NAME);
 		database.drop();
@@ -60,7 +61,9 @@ public class StudentMongoRepositoryTestIT {
 	public void testFindById() {
 	
 		Document d1 = addStudentWithStudyPlan("1");
-		Document d2 = addStudentWithStudyPlan("2");
+		addStudentWithStudyPlan("2");
+		
+		
 		assertTrue(studentMongoRepository.findById("1").getId()
 				.equals(fromDocumentToStudent(d1).getId()));
 	}
@@ -73,13 +76,12 @@ public class StudentMongoRepositoryTestIT {
 	@Test
 	public void testFindAll() {
 		
-		Document d1 = addStudentWithStudyPlan("3");
-		Document d2 = addStudentWithStudyPlan("4");
+		addStudentWithStudyPlan("3");
+		addStudentWithStudyPlan("4");
 		
 		assertThat(studentMongoRepository.findAll())
 		    .extracting(Student::getId)
 		    .containsExactlyInAnyOrder("3","4");
-	
 	}
 	@Test
 	public void testFindAllWhenDbIsEmpty() {
@@ -94,7 +96,7 @@ public class StudentMongoRepositoryTestIT {
 		Student s = fromDocumentToStudent(d1);
 		s.addCourse(new Course("3", "Sistemi Operativi", 12));
 		studentMongoRepository.updateStudyPlan(s);
-		Document d2 = studentCollection.find(Filters.eq("id", "5")).first();
+		Document d2 = studentCollection.find(Filters.eq("mnumber", "5")).first();
 		assertEquals(d2.get("studyPlan", List.class).size(), 3);
 
 	}
@@ -105,7 +107,7 @@ public class StudentMongoRepositoryTestIT {
 	private Document addStudentWithStudyPlan(String id){
 		
 		Document d = new Document()
-                .append("id", id)
+                .append("mnumber", id)
                 .append("name", "Mario")
                 .append("surname", "Rossi")
                 .append("idCdl", "1")
@@ -128,7 +130,7 @@ public class StudentMongoRepositoryTestIT {
 	private Student fromDocumentToStudent(Document d) {
 		
 		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
-		Student s = new Student(d.get("id").toString(), 
+		Student s = new Student(d.get("mnumber").toString(), 
 								d.get("name").toString(), 
 								d.get("surname").toString(),
 								d.get("idCdl").toString());

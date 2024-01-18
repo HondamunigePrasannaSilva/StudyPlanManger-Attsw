@@ -1,8 +1,6 @@
 package com.attsw.app.view.swing;
 
-import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDENT_COLLECTION_NAME;
-import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDYPLAN_DB_NAME;
-import static com.attsw.app.repository.mongo.CourseMongoRepository.STUDENT_COURSE_COLLECTION_NAME;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -47,6 +45,9 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 	private MongoCollection<Document> studentCollection;
 	private MongoCollection<Document> courseCollection;
 	
+	public static final String STUDENT_COLLECTION_NAME = "student";
+	public static final String STUDENT_COURSE_COLLECTION_NAME = "student_course";
+	public static final String STUDYPLAN_DB_NAME = "studyplan";
 	
 	@Override
 	public void onSetUp() {
@@ -55,8 +56,8 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 					mongo.getContainerIpAddress(),
 					mongo.getFirstMappedPort()));
 		
-			studentMongoRepository = new StudentMongoRepository(client);
-			courseRepository = new CourseMongoRepository(client);
+			studentMongoRepository = new StudentMongoRepository(client, STUDYPLAN_DB_NAME, STUDENT_COLLECTION_NAME);
+			courseRepository = new CourseMongoRepository(client, STUDYPLAN_DB_NAME, STUDENT_COURSE_COLLECTION_NAME);
 
 			MongoDatabase database = client.getDatabase(STUDYPLAN_DB_NAME);
 			database.drop();
@@ -161,7 +162,7 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 	private void addStudentWithCourse()
 	{
 		Document d = new Document()
-                .append("id", "1")
+                .append("mnumber", "1")
                 .append("name", "Mario")
                 .append("surname", "Rossi")
                 .append("idCdl", "1")

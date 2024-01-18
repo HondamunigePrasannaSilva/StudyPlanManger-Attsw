@@ -57,33 +57,39 @@ import com.attsw.app.view.StudyPlanView;
 		ArrayList<Course> sp = student.getStudyPlan();
 
 		if(sp.removeIf(c -> c.getCourseId() == course.getCourseId()))
+		{
 			studentRepository.updateStudyPlan(student);
+			studyPlanView.CourseRemoved(course);
+		}
 		else
 			studyPlanView.showError("Course not in study plan");
 
 	}
 
-	public Student updateStudyPlan(Student student, Course course1, Course course2) {
+	
+	public Student updateStudyPlan(Student student,String delNameCourse, int delCfu, String addNameCourse, int addCfu) {
 		
-		Course courseToAdd = courseRepository.findById(course2.getCourseId());
+		Course courseToAdd = courseRepository.findByNameAndCfu(addNameCourse, addCfu);
+		Course coursetoUpdate = courseRepository.findByNameAndCfu(delNameCourse, delCfu);
+		
 		if (courseToAdd == null)
-		{
+		{			
 			studyPlanView.showError("Course not found");
 			return student;
 		}
 		ArrayList<Course> sp = student.getStudyPlan();
-
-		if(sp.removeIf(c -> c.getCourseId() == course1.getCourseId()))	
+		
+		if(sp.removeIf(c -> c.getCourseId().equals(coursetoUpdate.getCourseId())))	
 		{	
-			student.addCourse(courseToAdd);		
-			
+			student.addCourse(courseToAdd);					
 			studentRepository.updateStudyPlan(student);
-			studyPlanView.CourseRemoved(course1);
+			studyPlanView.CourseRemoved(coursetoUpdate);
 			studyPlanView.CourseAdded(courseToAdd);
 			
 		}
-		
-		return studentRepository.findById(student.getId());
+		else
+			studyPlanView.showError("Course not in study plan");
+		return student;
 		
 	}
 	
