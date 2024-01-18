@@ -90,7 +90,7 @@
           <version>0.8.6</version>
           <configuration>
             <excludes>
-              <exclude>**/StudyPlanManager.*</exclude>
+              <exclude>**/src/main/java/com/attsw/app/swing/**/*</exclude>
             </excludes>
           </configuration>
           <executions>
