@@ -117,7 +117,7 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 				.containsExactlyInAnyOrder("2");
 
 	}
-
+	
 	@Test @GUITest
 	public void testShowStudyPlan() {
 
