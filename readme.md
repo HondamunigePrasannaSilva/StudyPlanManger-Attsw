@@ -1,0 +1,1 @@
+[![Coverage Status](https://coveralls.io/repos/github/HondamunigePrasannaSilva/StudyPlanManger-Attsw/badge.svg?branch=master)](https://coveralls.io/github/HondamunigePrasannaSilva/StudyPlanManger-Attsw?branch=master)
