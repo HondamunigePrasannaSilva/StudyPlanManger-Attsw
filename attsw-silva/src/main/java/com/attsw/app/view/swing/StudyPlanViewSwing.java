@@ -40,6 +40,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	private JButton btnRemoveSelectedCourse;
 	private JButton btnInsertNewCourse;
 	private JButton btnUpdateCourse;
+	private JButton btnLogout;
 	
 	private JScrollPane scrollPane;
 	private StudentController studentcontroller;
@@ -49,28 +50,6 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	
 	private Student student;
 	
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					StudyPlanViewSwing frame = new StudyPlanViewSwing();
-					// set the size of the window
-					
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
-	 * Create the frame.
-	 */
 	public StudyPlanViewSwing() {
 		setTitle("Study Plan Manager");
 		setResizable(false);
@@ -93,7 +72,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 			}
 		}); 
 		txtStudentId.setHorizontalAlignment(SwingConstants.CENTER);
-		txtStudentId.setBounds(184, 180, 151, 40);
+		txtStudentId.setBounds(144, 180, 151, 40);
 		contentPane.add(txtStudentId);
 		txtStudentId.setColumns(10);
 		txtStudentId.setName("txtStudentId");
@@ -112,12 +91,13 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 				btnLogin.setEnabled(false);
 				txtStudentId.setEnabled(false);
 				showStudyPlan(student.getStudyPlan());
+				btnLogout.setEnabled(true);
 			}
 			else
 				lbErrorMsg.setText("Student not found");
 		});
 		
-		btnLogin.setBounds(382, 179, 117, 40);
+		btnLogin.setBounds(319, 179, 117, 40);
 		contentPane.add(btnLogin);
 		btnLogin.setName("btnLogin");
 		
@@ -208,7 +188,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(604, 142, 18, 461);
+		separator_1.setBounds(613, 140, 18, 461);
 		contentPane.add(separator_1);
 		
 		JLabel lblManagement = new JLabel("Management");
@@ -275,13 +255,36 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnRemoveSelectedCourse.setBounds(768, 574, 246, 25);
 		contentPane.add(btnRemoveSelectedCourse);
 		btnRemoveSelectedCourse.setName("btnRemoveSelectedCourse");
+		
+		btnLogout = new JButton("Logout");
+		btnLogout.setEnabled(false);
+		btnLogout.setBounds(453, 179, 117, 41);
+		contentPane.add(btnLogout);
+		btnLogout.setName("btnLogout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				student = null;
+				btnRemoveSelectedCourse.setEnabled(false);
+				
+				scrollPane.setEnabled(false);
+				btnLogin.setEnabled(true);
+				txtStudentId.setEnabled(true);
+				txtStudentId.setText("");
+				txtCourseName.setText("");
+				txtcfu.setText("");
+				courseList.clear();
+				lbErrorMsg.setText(" ");
+				btnLogout.setEnabled(false);
+				
+			}
+		});
 		btnRemoveSelectedCourse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// get the selected item from the scrol pane
 				String coursename = clist.getSelectedValue().getCourseName();
-				String cfu = String.valueOf(clist.getSelectedValue().getCfu());
-				Course c = studentcontroller.findCourseByNameAndCfu(coursename, Integer.parseInt(cfu));
-			    studentcontroller.removeCourseFromStudyPlan(student, c);
+				int cfu = clist.getSelectedValue().getCfu();
+				
+			    studentcontroller.removeCourseFromStudyPlan(student,coursename, cfu);
 				
 				
 				
@@ -336,5 +339,4 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	{
 		lbErrorMsg.setText(" ");
 	}
-	
 }

@@ -96,12 +96,12 @@ public class StudentControllerTestIT {
 
 	@Test
 	public void testRemoveCourseFromStudyPlan() {
-
+ 
 		Document d = addStudentWithStudyPlan("1");
 		Student s = fromDocumentToStudent(d);
 		Course c = new Course("1", "Analisi Matematica", 12);
-
-		studentController.removeCourseFromStudyPlan(s, c);
+		
+		studentController.removeCourseFromStudyPlan(s, "Analisi Matematica", 12);
 
 		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
 				.containsExactly("2");
@@ -120,7 +120,7 @@ public class StudentControllerTestIT {
 		studentController.updateStudyPlan(s,"Fisica", 12, "Sistemi Operativi", 12);
 		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
 				.containsExactlyInAnyOrder("1", "3");
-	}
+	} 
 	
 	// ---------------------------------------------------------------------------------
 	private Document addCourseToDB(String id, String name, String cfu) {

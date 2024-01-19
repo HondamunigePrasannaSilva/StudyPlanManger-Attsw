@@ -56,18 +56,24 @@ import com.attsw.app.view.StudyPlanView;
 		
 	}
 
-	public void removeCourseFromStudyPlan(Student student, Course course) {
+	public void removeCourseFromStudyPlan(Student student, String delNameCourse, int delCfu) {
 		
+		
+		Course course = courseRepository.findByNameAndCfu(delNameCourse, delCfu);
+		
+		if (course == null) {
+			studyPlanView.showError("Course not found");
+			return;
+		}
 		ArrayList<Course> sp = student.getStudyPlan();
-
-		if(sp.removeIf(c -> c.getCourseId() == course.getCourseId()))
+		
+		if(sp.removeIf(c -> c.getCourseId().equals(course.getCourseId())))
 		{
 			studentRepository.updateStudyPlan(student);
 			studyPlanView.CourseRemoved(course);
 		}
 		else
 			studyPlanView.showError("Course not in study plan");
-
 	}
 
 	
@@ -90,16 +96,14 @@ import com.attsw.app.view.StudyPlanView;
 			studyPlanView.CourseRemoved(coursetoUpdate);
 			studyPlanView.CourseAdded(courseToAdd);
 			
-		}
+		} 
 		else
 			studyPlanView.showError("Course not in study plan");
 		return student;
 		
-	}
+	} 
 	
-	public Course findCourseByNameAndCfu(String name, int cfu) {
-		return courseRepository.findByNameAndCfu(name, cfu);
-	}
+
 
 
 

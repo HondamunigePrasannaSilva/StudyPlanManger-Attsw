@@ -179,8 +179,15 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 		assertThat(studentMongoRepository.findById("1").getStudyPlan()).extracting(Course::getCourseId).containsExactlyInAnyOrder("1","3");
 	}
 	
-	
-	private void addStudentWithCourse()
+	@Test @GUITest
+	public void testLogout()
+	{
+		window.textBox("txtStudentId").enterText("1");
+		window.button("btnLogin").click();
+		window.button("btnLogout").click();
+		assertThat(window.list("CourseList").contents()).isEmpty();
+	}
+ 	private void addStudentWithCourse()
 	{
 		Document d = new Document()
                 .append("mnumber", "1")

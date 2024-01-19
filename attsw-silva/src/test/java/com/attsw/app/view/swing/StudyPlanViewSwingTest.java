@@ -74,9 +74,9 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.button("btnInsertNewCourse").requireDisabled();
 		window.button("btnUpdateCourse").requireDisabled();
 		window.button("btnRemoveSelectedCourse").requireDisabled();
-	
+		window.button("btnLogout").requireDisabled();
 		window.scrollPane("scrollPane").requireDisabled();
-
+			
 		window.label("lbErrorMsg").requireText(" ");
 
 	}
@@ -117,6 +117,40 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		
 		window.button("btnRemoveSelectedCourse").requireEnabled();
 		window.scrollPane("scrollPane").requireEnabled();
+		
+		window.button("btnLogout").requireEnabled();
+	}
+	
+	@Test
+	public void testLogoutButton()
+	{
+		window.textBox("txtStudentId").enterText("1");
+		Student s = new Student("1", "Mario", "Rossi", "123");
+		ArrayList<Course> sp = new ArrayList<Course>();
+		Course c = new Course("1", "Analisi", 12);
+		
+		sp.add(c);
+		s.setStudyPlan(sp);
+		
+		when(studentcontroller.find("1")).thenReturn(s);
+		
+		window.button("btnLogin").click();
+		
+		window.button("btnLogout").click();
+		
+		window.textBox("txtStudentId").requireEnabled();
+		window.button("btnLogin").requireEnabled();
+		
+		window.button("btnRemoveSelectedCourse").requireDisabled();
+		window.scrollPane("scrollPane").requireDisabled();
+		
+		window.button("btnLogout").requireDisabled();
+		
+		window.textBox("txtCourseName").requireText("");
+		window.textBox("txtcfu").requireText("");
+		
+		window.scrollPane("scrollPane").requireDisabled();
+
 	}
 	
 	@Test @GUITest
@@ -229,7 +263,6 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 
 		txtCourseName.enterText("Analisi");
 		txtcfu.enterText("12");
-		when(studentcontroller.findCourseByNameAndCfu("Analisi", 12)).thenReturn(c);
 		
 		when(studentcontroller.insertCourseIntoStudyPlan(s, "Analisi", 12)).thenReturn(s);
 		
@@ -289,11 +322,9 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		});
 
 		window.list("CourseList").selectItem(0);
-		when(studentcontroller.findCourseByNameAndCfu("Analisi 1", 12)).thenReturn(c);
-		when(studentcontroller.findCourseByNameAndCfu("Analisi 2", 12)).thenReturn(c1);
-
+		
 		window.button("btnRemoveSelectedCourse").click();
-		verify(studentcontroller).removeCourseFromStudyPlan(s, c);
+		verify(studentcontroller).removeCourseFromStudyPlan(s,  "Analisi 1", 12);
 	}
 	
 	@Test
@@ -316,7 +347,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 	{
 		Course c1 = new Course("1", "Analisi 1", 12);
 		Course c2 = new Course("2", "Analisi 2", 12);
-		GuiActionRunner.execute(() -> {
+		GuiActionRunner.execute(() -> { 
 			ArrayList<Course> sp = new ArrayList<Course>();
 			sp.add(c1);
 			sp.add(c2);
