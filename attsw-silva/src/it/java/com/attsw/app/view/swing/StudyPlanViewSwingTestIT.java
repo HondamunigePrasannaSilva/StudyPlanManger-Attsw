@@ -30,6 +30,17 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import static com.attsw.app.repository.mongo.StudentMongoRepository.MNUMBER;
+import static com.attsw.app.repository.mongo.StudentMongoRepository.NAME;
+import static com.attsw.app.repository.mongo.StudentMongoRepository.SURNAME;
+import static com.attsw.app.repository.mongo.StudentMongoRepository.ID_CDL;
+import static com.attsw.app.repository.mongo.StudentMongoRepository.STUDY_PLAN;
+import static com.attsw.app.repository.mongo.CourseMongoRepository.COURSE_ID;
+import static com.attsw.app.repository.mongo.CourseMongoRepository.COURSE_NAME;
+import static com.attsw.app.repository.mongo.CourseMongoRepository.CFU;
+
+
+
 @RunWith(GUITestRunner.class)
 public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 	
@@ -190,19 +201,19 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
  	private void addStudentWithCourse()
 	{
 		Document d = new Document()
-                .append("mnumber", "1")
-                .append("name", "Mario")
-                .append("surname", "Rossi")
-                .append("idCdl", "1")
-                .append("studyPlan", Arrays.asList(
+                .append(MNUMBER, "1")
+                .append(NAME, "Mario")
+                .append(SURNAME, "Rossi")
+                .append(ID_CDL, "1")
+                .append(STUDY_PLAN, Arrays.asList(
 		                    new Document()
-		                        .append("courseId", "1")
-		                        .append("courseName", "Analisi Matematica")
-		                        .append("cfu", 12),
+		                        .append(COURSE_ID, "1")
+		                        .append(COURSE_NAME, "Analisi Matematica")
+		                        .append(CFU, 12),
 		                    new Document()
-		                        .append("courseId", "2")
-		                        .append("courseName", "Fisica")
-		                        .append("cfu", 12)));
+		                        .append(COURSE_ID, "2")
+		                        .append(COURSE_NAME, "Fisica")
+		                        .append(CFU, 12)));
 		studentCollection.insertOne(d);
 		
 		addCourseToDB("1", "Analisi Matematica", "12");

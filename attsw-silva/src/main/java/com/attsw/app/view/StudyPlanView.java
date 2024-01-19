@@ -8,8 +8,8 @@ public interface StudyPlanView {
 	
 	void showStudyPlan(List<Course> courses);
 	void showError(String message);
-	void CourseAdded(Course course);
-	void CourseRemoved(Course course);
+	void courseAdded(Course course);
+	void courseRemoved(Course course);
 
 }
 

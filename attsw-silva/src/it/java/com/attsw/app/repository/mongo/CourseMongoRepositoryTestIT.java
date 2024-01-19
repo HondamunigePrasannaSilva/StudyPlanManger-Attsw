@@ -6,7 +6,8 @@ import static com.attsw.app.repository.mongo.CourseMongoRepository.COURSE_NAME;
 import static com.attsw.app.repository.mongo.CourseMongoRepository.CFU;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.bson.Document;
 import org.junit.After;
@@ -68,24 +69,23 @@ public class CourseMongoRepositoryTestIT {
 	}
 	@Test
 	public void testFindById() {
-		Document c1 = addCourseToCollection("1", "Course1", "6");
-		Document c2 = addCourseToCollection("2", "Course2", "9");
+		addCourseToCollection("1", "Course1", "6");
+		addCourseToCollection("2", "Course2", "9");
 		
-		assertTrue(CourseMongoRepository.findById("1")
-			.getCourseId().equals("1"));
+		assertEquals("1", CourseMongoRepository.findById("1").getCourseId());
 		
 	}
 	
 	@Test 
 	public void testFineByNameAndCfu() {
-		Document c1 = addCourseToCollection("1", "Course1", "6");
-		Document c2 = addCourseToCollection("2", "Course2", "9");
+		addCourseToCollection("1", "Course1", "6");
+		addCourseToCollection("2", "Course2", "9");
 
-		assertTrue(CourseMongoRepository.findByNameAndCfu("Course1", 6).getCourseId().equals("1"));
+		assertEquals("1", CourseMongoRepository.findByNameAndCfu("Course1", 6).getCourseId());
 	}
 	@Test
 	public void testFindByIdWhenIdDoesNotExist() {
-        assertTrue(CourseMongoRepository.findById("1") == null);
+        assertNull(CourseMongoRepository.findById("1"));
     }
 
 	private Document addCourseToCollection(String id, String name, String cfu) {

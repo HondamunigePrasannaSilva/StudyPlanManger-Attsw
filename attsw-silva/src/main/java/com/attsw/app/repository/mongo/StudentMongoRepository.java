@@ -21,6 +21,12 @@ public class StudentMongoRepository implements StudentRepository{
 
 	
 	private MongoCollection<Document> studentCollection;
+
+	public static final String MNUMBER = "mnumber";
+	public static final String NAME = "name";
+	public static final String SURNAME = "surname";
+	public static final String ID_CDL = "idCdl";
+	public static final String STUDY_PLAN = "studyPlan";
 	
 	public StudentMongoRepository(MongoClient client, String dbName, String collectionName) {
 		studentCollection = client
@@ -32,14 +38,14 @@ public class StudentMongoRepository implements StudentRepository{
 	public List<Student> findAll() {
 		return StreamSupport
 				.stream(studentCollection.find().spliterator(), false)
-				.map(d -> fromDocumentToStudent(d))
+				.map(this::fromDocumentToStudent)
 				.collect(Collectors.toList());
 	}
 
 	@Override
 	public Student findById(String id) {
 	
-		Document d = studentCollection.find(Filters.eq("mnumber", id)).first();
+		Document d = studentCollection.find(Filters.eq(MNUMBER, id)).first();
 		
 		if (d == null)
             return null;
@@ -49,7 +55,7 @@ public class StudentMongoRepository implements StudentRepository{
 
 	@Override
 	public void updateStudyPlan(Student student) {
-		studentCollection.replaceOne(Filters.eq("mnumber", student.getId()), fromStudentToDocument(student));
+		studentCollection.replaceOne(Filters.eq(MNUMBER, student.getId()), fromStudentToDocument(student));
 		
 	}
 	
@@ -57,28 +63,28 @@ public class StudentMongoRepository implements StudentRepository{
 	
 	// -------------------------------------------------------------------
 	private Document fromStudentToDocument(Student student) {
-		ArrayList<Document> studyPlan = new ArrayList<Document>();
+		ArrayList<Document> studyPlan = new ArrayList<>();
 		for (Course course : student.getStudyPlan()) {
 			studyPlan.add(new Document("courseId", course.getCourseId()).append("courseName", course.getCourseName())
 					.append("cfu", course.getCfu()));
 		}
 		
-		Document d = new Document("mnumber", student.getId()).append("name", student.getName())
-				.append("surname", student.getSurname()).append("idCdl", student.getIdCdl())
-				.append("studyPlan", studyPlan);
+		return new Document(MNUMBER, student.getId()).append("name", student.getName())
+				.append(SURNAME, student.getSurname()).append("idCdl", student.getIdCdl())
+				.append(STUDY_PLAN, studyPlan);
 		
-		return d;
+		
 	}
 
 
 	private Student fromDocumentToStudent(Document d) {
 		
 		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
-		Student s = new Student(d.get("mnumber").toString(), 
-								d.get("name").toString(), 
-								d.get("surname").toString(),
-								d.get("idCdl").toString());
-		ArrayList<Course> studyPlanList = new ArrayList<Course>();
+		Student s = new Student(d.get(MNUMBER).toString(), 
+								d.get(NAME).toString(), 
+								d.get(SURNAME).toString(),
+								d.get(ID_CDL).toString());
+		ArrayList<Course> studyPlanList = new ArrayList<>();
 		for (Document document : studyPlan) {
 			studyPlanList.add(new Course(document.get("courseId").toString(),
 					                     document.get("courseName").toString(),

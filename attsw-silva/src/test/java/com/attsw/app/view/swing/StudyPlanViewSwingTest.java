@@ -77,7 +77,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.button("btnLogout").requireDisabled();
 		window.scrollPane("scrollPane").requireDisabled();
 			
-		window.label("lbErrorMsg").requireText(" ");
+		assertThat(window.list("CourseList").contents()).isEmpty();
 
 	}
 
@@ -85,14 +85,15 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 	public void testLoginButtonEnableWhenStudentIdIsNotEmpty() {
 
 		window.textBox("txtStudentId").enterText("1");
-		window.button("btnLogin").requireEnabled();
+		assertThat(window.button("btnLogin").isEnabled()).isTrue();
 	}
 	 
 	@Test
 	public void testLoginButtonDisabledWhenStudentIdisBlank() {
 
 		window.textBox("txtStudentId").enterText("   ");
-		window.button("btnLogin").requireDisabled();
+		
+		assertThat(window.button("btnLogin").isEnabled()).isFalse();
 	}
 
 	@Test @GUITest
@@ -149,7 +150,8 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.textBox("txtCourseName").requireText("");
 		window.textBox("txtcfu").requireText("");
 		
-		window.scrollPane("scrollPane").requireDisabled();
+		
+		assertThat(window.scrollPane("scrollPane").isEnabled()).isFalse();
 
 	}
 	
@@ -174,7 +176,8 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		JButtonFixture deleteButton = window.button(JButtonMatcher.withText("REMOVE SELECTED COURSE"));
 		deleteButton.requireEnabled();
 		window.list("CourseList").clearSelection();
-		deleteButton.requireDisabled();
+
+		assertThat(window.button("btnRemoveSelectedCourse").isEnabled()).isFalse();
 	}
 	
 	@Test
@@ -183,7 +186,8 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		GuiActionRunner.execute(
 			() -> studyplanview.showError("error message")
 		);
-		window.label("lbErrorMsg").requireText("error message");
+		
+		assertThat(window.label("lbErrorMsg").text()).isEqualTo("error message");
 	}
 	@Test
 	public void testUpdateButtonShouldBeEnabledOnlyWhenACourseIsSelected() {
@@ -195,7 +199,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		JButtonFixture updateButton = window.button(JButtonMatcher.withText("UPDATE COURSE"));
 		updateButton.requireEnabled();
 		window.list("CourseList").clearSelection();
-		updateButton.requireDisabled();
+		assertThat(window.button("btnUpdateCourse").isEnabled()).isFalse();
 	}
 	
 	@Test
@@ -205,8 +209,8 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 
 		window.list("CourseList").selectItem(0);
 		window.list("CourseList");
-		window.textBox("txtCourseName").requireText("Analisi");
 		window.textBox("txtcfu").requireText("12");
+		assertThat(window.textBox("txtCourseName").text()).isEqualTo("Analisi");
 	}
 	
 	@Test
@@ -218,7 +222,8 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		txtCourseName.enterText("Analisi");
 		txtcfu.enterText("12");
 		
-		window.button("btnInsertNewCourse").requireEnabled();
+		
+		assertThat(window.button("btnInsertNewCourse").isEnabled()).isTrue();
 		
 	}
 	
@@ -239,8 +244,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		txtCourseName.enterText("Analisi");
 		txtcfu.enterText(" ");
 
-		
-		window.button("btnInsertNewCourse").requireDisabled();
+		assertThat(window.button("btnInsertNewCourse").isEnabled()).isFalse();
 
 	}
 	
@@ -274,7 +278,6 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 	public void testUpdateCourseShouldCallStudentControllUpdate() {
 		Student s = new Student("1", "Mario", "Rossi", "123");
 		Course c = new Course("1", "Analisi 1", 12);
-		Course c1 = new Course("2", "Analisi 2", 12);
 		
 		ArrayList<Course> sp = new ArrayList<Course>();
 		sp.add(c);
@@ -354,7 +357,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 			studyplanview.showStudyPlan(sp);
 		});
 
-		GuiActionRunner.execute(() -> studyplanview.CourseRemoved(c1));
+		GuiActionRunner.execute(() -> studyplanview.courseRemoved(c1));
 
 		String[] listContents = window.list("CourseList").contents();
 		assertThat(listContents).containsExactly("Course: 2 Analisi 2 12");

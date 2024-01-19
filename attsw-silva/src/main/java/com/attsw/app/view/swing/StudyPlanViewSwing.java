@@ -1,6 +1,5 @@
 package com.attsw.app.view.swing;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,7 +10,6 @@ import com.attsw.app.model.Course;
 import com.attsw.app.model.Student;
 import com.attsw.app.view.StudyPlanView;
 
-import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.DefaultListModel;
@@ -21,13 +19,10 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.JList;
-import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 
@@ -50,6 +45,8 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	
 	private Student student;
 	
+	
+	public static final String FONT = "Dialog";
 	public StudyPlanViewSwing() {
 		setTitle("Study Plan Manager");
 		setResizable(false);
@@ -78,7 +75,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		txtStudentId.setName("txtStudentId");
 		
 		btnLogin = new JButton("Login");
-		// add action listner when the button is clicked print hello world
+
 		btnLogin.setEnabled(false);
 		
 		btnLogin.addActionListener(e -> {
@@ -102,7 +99,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnLogin.setName("btnLogin");
 		
 		JLabel lblStudyPlan = new JLabel("STUDY PLAN MANAGEMENT");
-		lblStudyPlan.setFont(new Font("Dialog", Font.BOLD, 25));
+		lblStudyPlan.setFont(new Font(FONT, Font.BOLD, 25));
 		lblStudyPlan.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStudyPlan.setBounds(395, 12, 464, 67);
 		contentPane.add(lblStudyPlan);
@@ -157,13 +154,9 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnInsertNewCourse.setBounds(104, 543, 186, 25);
 		contentPane.add(btnInsertNewCourse);
 		btnInsertNewCourse.setName("btnInsertNewCourse");
-		btnInsertNewCourse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-	
-				studentcontroller.insertCourseIntoStudyPlan(student,txtCourseName.getText(), Integer.parseInt(txtcfu.getText()));
-
-			}
-		});
+		btnInsertNewCourse.addActionListener(e ->  	
+				studentcontroller.insertCourseIntoStudyPlan(student,txtCourseName.getText(), Integer.parseInt(txtcfu.getText()))
+		);
 		
 	
 		
@@ -172,18 +165,12 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnUpdateCourse.setBounds(319, 543, 166, 25);
 		contentPane.add(btnUpdateCourse);
 		btnUpdateCourse.setName("btnUpdateCourse");
-		btnUpdateCourse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+		btnUpdateCourse.addActionListener(e -> {
+
 				Student s = studentcontroller.updateStudyPlan(student, clist.getSelectedValue().getCourseName(),
 							clist.getSelectedValue().getCfu(), txtCourseName.getText(),
-							Integer.parseInt(txtcfu.getText()));
-					
-					showStudyPlan(s.getStudyPlan());
-				
-				
-
-			}
+							Integer.parseInt(txtcfu.getText()));					
+				showStudyPlan(s.getStudyPlan());
 		});
 		
 		JSeparator separator_1 = new JSeparator();
@@ -193,14 +180,14 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		
 		JLabel lblManagement = new JLabel("Management");
 		lblManagement.setHorizontalAlignment(SwingConstants.CENTER);
-		lblManagement.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblManagement.setFont(new Font(FONT, Font.BOLD, 21));
 		lblManagement.setBounds(144, 276, 313, 67);
 		contentPane.add(lblManagement);
 		lblManagement.setName("lblManagement");
 		
 		JLabel lblLogin = new JLabel("Login");
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLogin.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblLogin.setFont(new Font(FONT, Font.BOLD, 21));
 		lblLogin.setBounds(157, 101, 313, 67);
 		contentPane.add(lblLogin);
 		lblLogin.setName("lblLogin");
@@ -237,13 +224,13 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		
 		JLabel lblStudyPlan_1 = new JLabel("Study Plan");
 		lblStudyPlan_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblStudyPlan_1.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblStudyPlan_1.setFont(new Font(FONT, Font.BOLD, 21));
 		lblStudyPlan_1.setBounds(739, 101, 313, 67);
 		contentPane.add(lblStudyPlan_1);
 		lblStudyPlan_1.setName("lblStudyPlan_1");
 		
 		lbErrorMsg = new JLabel(" ");
-		lbErrorMsg.setFont(new Font("Dialog", Font.BOLD, 14));
+		lbErrorMsg.setFont(new Font(FONT, Font.BOLD, 14));
 		lbErrorMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		lbErrorMsg.setForeground(new Color(255, 0, 0));
 		lbErrorMsg.setBounds(184, 625, 873, 15);
@@ -261,8 +248,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnLogout.setBounds(453, 179, 117, 41);
 		contentPane.add(btnLogout);
 		btnLogout.setName("btnLogout");
-		btnLogout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnLogout.addActionListener(e ->{
 				student = null;
 				btnRemoveSelectedCourse.setEnabled(false);
 				
@@ -275,25 +261,18 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 				courseList.clear();
 				lbErrorMsg.setText(" ");
 				btnLogout.setEnabled(false);
-				
-			}
+			
 		});
-		btnRemoveSelectedCourse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// get the selected item from the scrol pane
+		btnRemoveSelectedCourse.addActionListener(e ->{
 				String coursename = clist.getSelectedValue().getCourseName();
 				int cfu = clist.getSelectedValue().getCfu();
 				
 			    studentcontroller.removeCourseFromStudyPlan(student,coursename, cfu);
-				
-				
-				
-			}
+			
 		});
 	}
 
 	public void setSudyPlanController(StudentController studentcontroller) {
-		// TODO Auto-generated method stub
 		this.studentcontroller = studentcontroller;
 		
 	}
@@ -307,7 +286,6 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 
 	@Override
 	public void showStudyPlan(List<Course> courses) {
-		// TODO Auto-generated method stub
 		courseList.clear();
 		courses.forEach(courseList::addElement);
 
@@ -321,7 +299,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	}
 
 	@Override
-	public void CourseAdded(Course course) {
+	public void courseAdded(Course course) {
 		
 		courseList.addElement(course);
 		resetLabel();
@@ -329,7 +307,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	}
 
 	@Override
-	public void CourseRemoved(Course course) {
+	public void courseRemoved(Course course) {
 		
 		courseList.removeElement(course);
 		resetLabel();

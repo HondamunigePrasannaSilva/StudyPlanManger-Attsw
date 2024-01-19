@@ -1,10 +1,8 @@
 
 package com.attsw.app.repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.attsw.app.model.Course;
 import com.attsw.app.model.Student;
 
 public interface StudentRepository {

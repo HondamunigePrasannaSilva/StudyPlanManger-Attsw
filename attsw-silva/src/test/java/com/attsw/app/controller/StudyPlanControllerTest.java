@@ -185,8 +185,8 @@ public class StudyPlanControllerTest {
 		assertFalse(s.getStudyPlan().contains(course1));
 		
 		verify(studentRepository).updateStudyPlan(student);
-		verify(studyPlanView).CourseRemoved(course1);
-		verify(studyPlanView).CourseAdded(course2);
+		verify(studyPlanView).courseRemoved(course1);
+		verify(studyPlanView).courseAdded(course2);
 		
 
 	}

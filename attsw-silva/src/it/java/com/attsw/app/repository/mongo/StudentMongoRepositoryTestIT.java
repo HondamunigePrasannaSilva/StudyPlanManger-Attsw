@@ -3,6 +3,7 @@ package com.attsw.app.repository.mongo;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.bson.Document;
@@ -49,7 +50,7 @@ public class StudentMongoRepositoryTestIT {
 		MongoDatabase database = client.getDatabase(STUDYPLAN_DB_NAME);
 		database.drop();
 		studentCollection = database.getCollection(STUDENT_COLLECTION_NAME);
-	}
+	} 
 
 	
 	@After
@@ -64,13 +65,12 @@ public class StudentMongoRepositoryTestIT {
 		addStudentWithStudyPlan("2");
 		
 		
-		assertTrue(studentMongoRepository.findById("1").getId()
-				.equals(fromDocumentToStudent(d1).getId()));
+		assertEquals(fromDocumentToStudent(d1).getId(), studentMongoRepository.findById("1").getId());
 	}
 	
 	@Test
 	public void testFindByIdWhenIdDoesNotExist() {
-		assertTrue(studentMongoRepository.findById("1") == null);
+		assertNull(studentMongoRepository.findById("1"));
 	}
 	
 	@Test
@@ -97,7 +97,7 @@ public class StudentMongoRepositoryTestIT {
 		s.addCourse(new Course("3", "Sistemi Operativi", 12));
 		studentMongoRepository.updateStudyPlan(s);
 		Document d2 = studentCollection.find(Filters.eq("mnumber", "5")).first();
-		assertEquals(d2.get("studyPlan", List.class).size(), 3);
+		assertEquals(3, d2.get("studyPlan", List.class).size());
 
 	}
 	

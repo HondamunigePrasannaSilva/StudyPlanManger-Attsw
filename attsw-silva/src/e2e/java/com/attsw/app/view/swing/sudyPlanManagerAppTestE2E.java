@@ -27,7 +27,7 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 import com.mongodb.client.model.Filters;
 
 @RunWith(GUITestRunner.class)
-public class SudyPlanManagerAppE2E extends AssertJSwingJUnitTestCase {
+public class sudyPlanManagerAppTestE2E extends AssertJSwingJUnitTestCase {
 
 	
 	@ClassRule

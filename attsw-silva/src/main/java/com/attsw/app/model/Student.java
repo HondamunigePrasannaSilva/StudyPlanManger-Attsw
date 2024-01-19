@@ -1,5 +1,5 @@
 package com.attsw.app.model;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Student {
 	
@@ -9,10 +9,9 @@ public class Student {
 	private String surname;
 	private String idCdl;
 	
-	private ArrayList<Course> StudyPlan;
+	private List<Course> studyPlan;
 	
 	public Student(String id, String name, String surname, String idCdl) {
-		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
@@ -27,18 +26,18 @@ public class Student {
 	}
 
 	
-	public ArrayList<Course> getStudyPlan() {
-		return StudyPlan;
+	public List<Course> getStudyPlan() {
+		return studyPlan;
 	}
 	
 
-	public void setStudyPlan(ArrayList<Course> StudyPlan) {
-		this.StudyPlan = StudyPlan;
+	public void setStudyPlan(List<Course> studyPlan) {
+		this.studyPlan = studyPlan;
 	}
 		
 
 	public void addCourse(Course course) {
-		this.StudyPlan.add(course);
+		this.studyPlan.add(course);
 		 
 	}
 

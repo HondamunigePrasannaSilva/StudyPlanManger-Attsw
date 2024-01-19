@@ -1,6 +1,6 @@
 package com.attsw.app.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.attsw.app.model.Course;
 import com.attsw.app.model.Student;
@@ -14,7 +14,12 @@ import com.attsw.app.view.StudyPlanView;
 	private StudentRepository studentRepository;
 	private CourseRepository courseRepository;
 	private StudyPlanView studyPlanView;
-
+	
+	// create a constant 
+	public static final String ERROR_COURSE_NOT_FOUND = "Course not found";
+	public static final String ERROR_COURSE_NOT_IN_STUDY_PLAN = "Course not in study plan";
+	public static final String ERROR_STUDENT_NOT_FOUND = "Student not found";
+ 
 	public StudentController(StudentRepository studentRepository, CourseRepository courseRepository, StudyPlanView studyPlanView) {
 		
 		this.studentRepository = studentRepository;
@@ -27,7 +32,7 @@ import com.attsw.app.view.StudyPlanView;
 		Student student = studentRepository.findById(studentId);
 
 		if (student == null)
-			studyPlanView.showError("Student not found");
+			studyPlanView.showError(ERROR_STUDENT_NOT_FOUND);
 		else
 			studyPlanView.showStudyPlan(student.getStudyPlan());
 		
@@ -39,18 +44,18 @@ import com.attsw.app.view.StudyPlanView;
 		Course course = courseRepository.findByNameAndCfu(addNameCourse, addCfu);
 		if (course == null)
 		{
-			studyPlanView.showError("Course not found");
+			studyPlanView.showError(ERROR_COURSE_NOT_FOUND);
 			return null;
 		}
 		
 		if (student.getStudyPlan().stream()
-				.filter(c -> c.getCourseId() == course.getCourseId())
+				.filter(c -> c.getCourseId().equals(course.getCourseId()))
 				.count() > 0)
 			return null;
 		
 		student.addCourse(course);
 		studentRepository.updateStudyPlan(student);
-		studyPlanView.CourseAdded(course);
+		studyPlanView.courseAdded(course);
 		
 		return student;
 		
@@ -62,18 +67,18 @@ import com.attsw.app.view.StudyPlanView;
 		Course course = courseRepository.findByNameAndCfu(delNameCourse, delCfu);
 		
 		if (course == null) {
-			studyPlanView.showError("Course not found");
+			studyPlanView.showError(ERROR_COURSE_NOT_FOUND);
 			return;
 		}
-		ArrayList<Course> sp = student.getStudyPlan();
+		List<Course> sp = student.getStudyPlan();
 		
 		if(sp.removeIf(c -> c.getCourseId().equals(course.getCourseId())))
 		{
 			studentRepository.updateStudyPlan(student);
-			studyPlanView.CourseRemoved(course);
+			studyPlanView.courseRemoved(course);
 		}
 		else
-			studyPlanView.showError("Course not in study plan");
+			studyPlanView.showError(ERROR_COURSE_NOT_IN_STUDY_PLAN);
 	}
 
 	
@@ -84,21 +89,21 @@ import com.attsw.app.view.StudyPlanView;
 		
 		if (courseToAdd == null)
 		{			
-			studyPlanView.showError("Course not found");
+			studyPlanView.showError(ERROR_COURSE_NOT_FOUND);
 			return student;
 		}
-		ArrayList<Course> sp = student.getStudyPlan();
+		List<Course> sp = student.getStudyPlan();
 		
 		if(sp.removeIf(c -> c.getCourseId().equals(coursetoUpdate.getCourseId())))	
 		{	
 			student.addCourse(courseToAdd);					
 			studentRepository.updateStudyPlan(student);
-			studyPlanView.CourseRemoved(coursetoUpdate);
-			studyPlanView.CourseAdded(courseToAdd);
+			studyPlanView.courseRemoved(coursetoUpdate);
+			studyPlanView.courseAdded(courseToAdd);
 			
 		} 
 		else
-			studyPlanView.showError("Course not in study plan");
+			studyPlanView.showError(ERROR_COURSE_NOT_IN_STUDY_PLAN);
 		return student;
 		
 	} 

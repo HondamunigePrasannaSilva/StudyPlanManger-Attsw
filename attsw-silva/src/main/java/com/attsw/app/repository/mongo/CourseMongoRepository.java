@@ -28,12 +28,12 @@ public class CourseMongoRepository implements CourseRepository {
 	public List<Course> findAll() {
 		return StreamSupport
 				.stream(courseCollection.find().spliterator(), false)
-				.map(d -> fromDocumentToStudent(d))
+				.map(this::fromDocumentToStudent)
 				.collect(Collectors.toList());
 	}
 	@Override
 	public Course findById(String id) {
-		Document c = courseCollection.find(new Document("courseId", id)).first();
+		Document c = courseCollection.find(new Document(COURSE_ID, id)).first();
 		if (c == null)
 			return null;
 		else
@@ -43,16 +43,16 @@ public class CourseMongoRepository implements CourseRepository {
 	
 	private Course fromDocumentToStudent(Document d) {
 		
-		Course course = new Course(d.getString("courseId"),d.getString("courseName"),
-				Integer.parseInt(d.getString("cfu")));
-		return course;
+		return new Course(d.getString(COURSE_ID),d.getString(COURSE_NAME),
+				Integer.parseInt(d.getString(CFU)));
+		
 	}
 	@Override
 	public Course findByNameAndCfu(String name, int cfu) {
-		Course course = StreamSupport.stream(courseCollection.find().spliterator(), false)
-				.map(d -> fromDocumentToStudent(d)).filter(c -> c.getCourseName().equals(name) && c.getCfu() == cfu)
+		return StreamSupport.stream(courseCollection.find().spliterator(), false)
+				.map(this::fromDocumentToStudent).filter(c -> c.getCourseName().equals(name) && c.getCfu() == cfu)
 				.findFirst().orElse(null);
-	    return course;
+	    
 	    
 		
 	}
