@@ -24,7 +24,7 @@ jobs:
         matrix:
         #os: [ubuntu-latest, macos-latest, windows-latest]
           include:
-            - java: 11
+            - java: 8
               additional-maven-args: >
                 -Pcoveralls
                 -DrepoToken=$COVERALLS_REPO_TOKEN
@@ -63,6 +63,8 @@ jobs:
         name: surefire-report-jdk-${{ matrix.java }}
         path: '**/target/site'
     - name: Build with Maven and SonarCloud
+      with:
+        java-version: 11
       run: >
         xvfb-run mvn verify -Pjacoco sonar:sonar
         -Dsonar.organization=hondamunigeprasannasilva
