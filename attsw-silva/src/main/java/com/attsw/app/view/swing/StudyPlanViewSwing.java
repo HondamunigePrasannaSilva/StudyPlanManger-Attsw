@@ -72,6 +72,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	 * Create the frame.
 	 */
 	public StudyPlanViewSwing() {
+		setTitle("Study Plan Manager");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1213, 726);
@@ -79,17 +80,18 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		setSize(1200, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		
+		
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		txtStudentId = new JTextField();
 		txtStudentId.addKeyListener(new KeyAdapter() {
-			@Override
+			@Override 
 			public void keyReleased(KeyEvent e) {
 				btnLogin.setEnabled(!txtStudentId.getText().isEmpty() && txtStudentId.getText().trim().length() > 0);
 			}
-		});
+		}); 
 		txtStudentId.setHorizontalAlignment(SwingConstants.CENTER);
 		txtStudentId.setBounds(184, 180, 151, 40);
 		contentPane.add(txtStudentId);
@@ -113,8 +115,6 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 			}
 			else
 				lbErrorMsg.setText("Student not found");
-		
-			
 		});
 		
 		btnLogin.setBounds(382, 179, 117, 40);
@@ -180,8 +180,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnInsertNewCourse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 	
-				Course c = studentcontroller.findCourseByNameAndCfu(txtCourseName.getText(), Integer.parseInt(txtcfu.getText()));
-				studentcontroller.insertCourseIntoStudyPlan(student, c);
+				studentcontroller.insertCourseIntoStudyPlan(student,txtCourseName.getText(), Integer.parseInt(txtcfu.getText()));
 
 			}
 		});

@@ -41,7 +41,7 @@ public class StudyPlanControllerTest {
 		when(studentRepository.findById("1")).thenReturn(null);
 		studentController.find("1");
 		verify(studyPlanView).showError("Student not found");
-	}
+	} 
 
 	@Test
 	public void testFindStudentWhenStudentIsPresent()
@@ -68,9 +68,8 @@ public class StudyPlanControllerTest {
 		Student student = createStudentWithStudyPlan();
 		Course analisi2 = new Course("2", "Analisi 2", 12);
 		
-		when(courseRepository.findById("2")).thenReturn(analisi2);
-		
-		studentController.insertCourseIntoStudyPlan(student, analisi2);
+		when(courseRepository.findByNameAndCfu("Analisi 2", 12)).thenReturn(analisi2);
+		studentController.insertCourseIntoStudyPlan(student, "Analisi 2", 12);
 		assertTrue(student.getStudyPlan().contains(analisi2));	
 	}
 
@@ -79,23 +78,24 @@ public class StudyPlanControllerTest {
 		Student student = createStudentWithStudyPlan();
 		Course course = new Course("1", "Analisi 1", 12);
 
-		when(courseRepository.findById("1")).thenReturn(course);
-		studentController.insertCourseIntoStudyPlan(student, course);
+		when(courseRepository.findByNameAndCfu("Analisi 1", 12)).thenReturn(course);
+		
+		studentController.insertCourseIntoStudyPlan(student, "Analisi 1", 12);
 		
 		assertThat(student.getStudyPlan()).extracting(Course::getCourseId).containsExactlyInAnyOrder("1");
 			
 	}
 
 	@Test
-	public void testInsertCourseIntoStudyPlanCallsfindByIdFromRepository() {
+	public void testInsertCourseIntoStudyPlanCallsfindByNameAndCfuCourseRepository() {
 
 		Student student = createStudentWithStudyPlan();
 		Course course = new Course("2", "Analisi 2", 12);
 
-		when(courseRepository.findById("2")).thenReturn(course);
-		studentController.insertCourseIntoStudyPlan(student, course);
+		when(courseRepository.findByNameAndCfu("Analisi 2", 12)).thenReturn(course);
+		studentController.insertCourseIntoStudyPlan(student, "Analisi 2", 12);
 
-		verify(courseRepository).findById(course.getCourseId());
+		verify(courseRepository).findByNameAndCfu("Analisi 2", 12);
 	}
 
 	@Test
@@ -103,8 +103,9 @@ public class StudyPlanControllerTest {
 		Student student = createStudentWithStudyPlan();
 		Course course = new Course("3", "Analisi 3", 12);
 		
-		when(courseRepository.findById("3")).thenReturn(null);
-		studentController.insertCourseIntoStudyPlan(student, course);
+		when(courseRepository.findByNameAndCfu("Analisi 3", 12)).thenReturn(null);
+		
+		studentController.insertCourseIntoStudyPlan(student, "Analisi 3", 12);
 		verify(studyPlanView).showError("Course not found");
 	}
 	
@@ -113,8 +114,8 @@ public class StudyPlanControllerTest {
 		Student student = createStudentWithStudyPlan();
 		Course course = new Course("2", "Analisi 2", 12);
 
-		when(courseRepository.findById("2")).thenReturn(course);
-		studentController.insertCourseIntoStudyPlan(student, course);
+		when(courseRepository.findByNameAndCfu("Analisi 2", 12)).thenReturn(course);
+		studentController.insertCourseIntoStudyPlan(student, "Analisi 2", 12);
 
 		verify(studentRepository).updateStudyPlan(student);
 	}
@@ -125,7 +126,7 @@ public class StudyPlanControllerTest {
 	public void testRemoveCourseFromStudyPlanWhenCourseIsPresent() {
 		Student student = createStudentWithStudyPlan();
 		Course analisi1 = new Course("1", "Analisi 1", 12);
-		when(courseRepository.findById("1")).thenReturn(analisi1);
+		when(courseRepository.findByNameAndCfu("Analisi 1", 12)).thenReturn(analisi1);
 		studentController.removeCourseFromStudyPlan(student, analisi1);
 		assertTrue(student.getStudyPlan().isEmpty());
 	}
@@ -135,10 +136,10 @@ public class StudyPlanControllerTest {
 		Student student = createStudentWithStudyPlan();
 		Course analisi2 = new Course("2", "Analisi 2", 12);
 
-		when(courseRepository.findById("2")).thenReturn(null);
+		when(courseRepository.findByNameAndCfu("Analisi 2", 12)).thenReturn(null);
 		studentController.removeCourseFromStudyPlan(student, analisi2);
 		verify(studyPlanView).showError("Course not in study plan");
-		
+		 
 
 	}
 	@Test
@@ -165,8 +166,6 @@ public class StudyPlanControllerTest {
 		Course course1 = new Course("1", "Analisi 1", 12);
 		Course course2 = new Course("2", "Analisi 1", 6);
 
-		when(courseRepository.findById("2")).thenReturn(course2);
-
 		when(courseRepository.findByNameAndCfu("Analisi 1", 6)).thenReturn(course2);
 		when(courseRepository.findByNameAndCfu("Analisi 1", 12)).thenReturn(course1);
 		
@@ -183,6 +182,7 @@ public class StudyPlanControllerTest {
 		
 
 	}
+	
 	@Test
 	public void testUpdateOneCourseOfStudyPlanWhenCourseIsNotPresentInRepository()
 	{
@@ -191,7 +191,6 @@ public class StudyPlanControllerTest {
 		Course course1 = new Course("1", "Analisi 1", 12);
 		Course course2 = new Course("2", "Analisi 1", 6);
 
-		when(courseRepository.findById("2")).thenReturn(null);
 		when(courseRepository.findByNameAndCfu("Analisi 1", 6)).thenReturn(null);
 		when(courseRepository.findByNameAndCfu("Analisi 1", 12)).thenReturn(course1);
 		
@@ -211,7 +210,6 @@ public class StudyPlanControllerTest {
 		Course course1 = new Course("3", "Analisi 2", 12);
 		Course course2 = new Course("4", "Analisi 2", 6);
 
-		when(courseRepository.findById("2")).thenReturn(course2);
 		when(courseRepository.findByNameAndCfu("Analisi 2", 6)).thenReturn(course2);
 		when(courseRepository.findByNameAndCfu("Analisi 2", 12)).thenReturn(course1);
 

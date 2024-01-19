@@ -109,6 +109,7 @@
           <artifactId>coveralls-maven-plugin</artifactId>
           <version>4.3.0</version>
         </plugin>
+        
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -123,6 +124,7 @@
             <configuration>
               <sources>
                 <source>src/it/java</source>
+                <source>src/e2e/java</source>
               </sources>
             </configuration>
           </execution>
@@ -139,10 +141,26 @@
         </configuration>
         <executions>
           <execution>
+            <id>default-it</id>
             <goals>
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>e2e-tests</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/*IT.java</exclude>
+              </excludes>
+              <includes>
+                <include>**/*E2E.java</include>
+              </includes>
+            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -87,7 +87,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.textBox("txtStudentId").enterText("1");
 		window.button("btnLogin").requireEnabled();
 	}
-	
+	 
 	@Test
 	public void testLoginButtonDisabledWhenStudentIdisBlank() {
 
@@ -231,10 +231,10 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		txtcfu.enterText("12");
 		when(studentcontroller.findCourseByNameAndCfu("Analisi", 12)).thenReturn(c);
 		
-		when(studentcontroller.insertCourseIntoStudyPlan(s, c)).thenReturn(s);
+		when(studentcontroller.insertCourseIntoStudyPlan(s, "Analisi", 12)).thenReturn(s);
 		
 		window.button("btnInsertNewCourse").click();
-		verify(studentcontroller).insertCourseIntoStudyPlan(s, c);
+		verify(studentcontroller).insertCourseIntoStudyPlan(s, "Analisi", 12);
 	}
 	
 	@Test

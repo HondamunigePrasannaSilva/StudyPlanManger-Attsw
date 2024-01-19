@@ -65,7 +65,7 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 			courseCollection = database.getCollection(STUDENT_COURSE_COLLECTION_NAME);
 			
 			addStudentWithCourse();
-			
+			 
 			window = new FrameFixture(robot(), GuiActionRunner.execute(() -> {
 				StudyPlanViewSwing studyPlanView = new StudyPlanViewSwing();
                 studentController = new StudentController(studentMongoRepository, courseRepository, studyPlanView);
@@ -73,7 +73,7 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
                 studyPlanView.setPreferredSize(new Dimension(1200, 700));
                 
                 return studyPlanView;
-			}));
+			})); 
 			
 			window.show();
 			
@@ -103,6 +103,26 @@ public class StudyPlanViewSwingTestIT extends AssertJSwingJUnitTestCase{
 		assertThat(studentMongoRepository.findById("1").getStudyPlan()).extracting(Course::getCourseId).containsExactlyInAnyOrder("1","2","3");
 		
 		}
+	
+	@Test @GUITest
+	public void testInsertCourseNotInList() {
+		
+		window.textBox("txtStudentId").enterText("1");
+		window.button("btnLogin").click();
+		
+		JTextComponentFixture txtCourseName = window.textBox("txtCourseName");
+		JTextComponentFixture txtcfu = window.textBox("txtcfu");
+		
+		txtCourseName.enterText("Fisica 3");
+		txtcfu.enterText("12");
+		
+		window.button("btnInsertNewCourse").click();
+		
+		assertThat(window.label("lbErrorMsg").text()).isEqualTo("Course not found");
+		
+		}
+
+	
 
 	@Test @GUITest
 	public void testRemoveCourseFromList() {

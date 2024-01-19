@@ -34,10 +34,14 @@ import com.attsw.app.view.StudyPlanView;
 		return student;
 	}
 
-	public Student insertCourseIntoStudyPlan(Student student, Course course) {
+	public Student insertCourseIntoStudyPlan(Student student,String addNameCourse, int addCfu) {
 		
-		if (courseRepository.findById(course.getCourseId()) == null)
+		Course course = courseRepository.findByNameAndCfu(addNameCourse, addCfu);
+		if (course == null)
+		{
 			studyPlanView.showError("Course not found");
+			return null;
+		}
 		
 		if (student.getStudyPlan().stream()
 				.filter(c -> c.getCourseId() == course.getCourseId())

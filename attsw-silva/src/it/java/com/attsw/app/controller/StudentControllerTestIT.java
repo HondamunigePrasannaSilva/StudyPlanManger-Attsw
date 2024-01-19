@@ -48,7 +48,7 @@ public class StudentControllerTestIT {
 	
 	@Before
 	public void setup() {
-	
+	 
 		client = new MongoClient(
 			new ServerAddress(
 				mongo.getContainerIpAddress(),
@@ -88,7 +88,7 @@ public class StudentControllerTestIT {
 		Document course = addCourseToDB("3", "Sistemi Operativi", "12");
 		Student s = fromDocumentToStudent(d);
 
-		studentController.insertCourseIntoStudyPlan(s, c);
+		studentController.insertCourseIntoStudyPlan(s, "Sistemi Operativi", 12);
 
 		assertThat(studentController.find("1").getStudyPlan()).extracting(Course::getCourseId)
 				.containsExactlyInAnyOrder("1", "2", "3");
@@ -135,7 +135,7 @@ public class StudentControllerTestIT {
 	}
 	
 	private Document addStudentWithStudyPlan(String id){
-		
+		 
 		Document d = new Document()
                 .append("mnumber", id)
                 .append("name", "Mario")

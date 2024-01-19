@@ -23,7 +23,7 @@ public class StudyPlanManger implements Callable<Void>{
 	
 	@Option(names = { "--mongo-port" }, description = "MongoDB host port")
 	private int mongoPort = 27017;
-	
+	 
 	@Option(names = { "--db-name" }, description = "Database name")
 	private String databaseName = "studyplan";
 	
