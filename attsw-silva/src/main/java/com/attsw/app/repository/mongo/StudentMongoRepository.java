@@ -69,8 +69,8 @@ public class StudentMongoRepository implements StudentRepository{
 					.append("cfu", course.getCfu()));
 		}
 		
-		return new Document(MNUMBER, student.getId()).append("name", student.getName())
-				.append(SURNAME, student.getSurname()).append("idCdl", student.getIdCdl())
+		return new Document(MNUMBER, student.getId()).append(NAME, student.getName())
+				.append(SURNAME, student.getSurname()).append(ID_CDL, student.getIdCdl())
 				.append(STUDY_PLAN, studyPlan);
 		
 		
@@ -79,7 +79,7 @@ public class StudentMongoRepository implements StudentRepository{
 
 	private Student fromDocumentToStudent(Document d) {
 		
-		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
+		List<Document> studyPlan = (List<Document>) d.get(STUDY_PLAN);
 		Student s = new Student(d.get(MNUMBER).toString(), 
 								d.get(NAME).toString(), 
 								d.get(SURNAME).toString(),

@@ -24,6 +24,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+
 public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 
 	private static final long serialVersionUID = 1L;
@@ -38,19 +39,19 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	private JButton btnLogout;
 	
 	private JScrollPane scrollPane;
-	private StudentController studentcontroller;
+	private transient StudentController studentcontroller;
 	private JLabel lbErrorMsg;
 	private DefaultListModel<Course> courseList;
 	private JList<Course> clist;
 	
-	private Student student;
+	private transient Student student;
 	
 	
 	public static final String FONT = "Dialog";
 	public StudyPlanViewSwing() {
 		setTitle("Study Plan Manager");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1213, 726);
 		// set windows size  
 		setSize(1200, 700);
