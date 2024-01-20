@@ -24,7 +24,7 @@ import org.assertj.swing.core.matcher.JButtonMatcher;
 
 
 @RunWith(GUITestRunner.class)
-public class sudyPlanManagerAppTestE2E extends AssertJSwingJUnitTestCase {
+public class TestsudyPlanManagerAppTestE2E extends AssertJSwingJUnitTestCase {
 
 	
 	@ClassRule
