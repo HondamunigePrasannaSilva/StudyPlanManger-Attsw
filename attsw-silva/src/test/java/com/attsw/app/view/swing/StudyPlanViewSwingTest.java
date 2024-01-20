@@ -95,7 +95,8 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		
 		assertThat(window.button("btnLogin").isEnabled()).isFalse();
 	}
-
+	
+	
 	@Test @GUITest
 	public void testEnableButtonsAndTxtFieldWhenLoginButtonIsPressed() {
 

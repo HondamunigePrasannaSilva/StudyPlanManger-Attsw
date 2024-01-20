@@ -84,6 +84,21 @@ public class CourseMongoRepositoryTestIT {
 		assertEquals("1", CourseMongoRepository.findByNameAndCfu("Course1", 6).getCourseId());
 	}
 	@Test
+	public void testFindByNameAndCfuWhenNameIsIncorrect() {
+		addCourseToCollection("1", "Course1", "6");
+		assertNull(CourseMongoRepository.findByNameAndCfu("Course 1", 6));
+	}
+	@Test
+	public void testFindByNameAndCfuWhenCfuIsIncorrect() {
+		addCourseToCollection("1", "Course1", "6");
+		assertNull(CourseMongoRepository.findByNameAndCfu("Course1", 9));
+	}
+	@Test
+	public void testFindByNameAndCfuWhenCfuAndNameAreIncorrect() {
+		addCourseToCollection("1", "Course1", "6");
+		assertNull(CourseMongoRepository.findByNameAndCfu("Course 1", 9));
+	}
+	@Test
 	public void testFindByIdWhenIdDoesNotExist() {
         assertNull(CourseMongoRepository.findById("1"));
     }

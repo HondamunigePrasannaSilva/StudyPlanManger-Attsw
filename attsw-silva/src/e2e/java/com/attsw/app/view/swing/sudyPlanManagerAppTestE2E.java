@@ -3,7 +3,6 @@ package com.attsw.app.view.swing;
 import java.util.Arrays;
 import static org.assertj.swing.launcher.ApplicationLauncher.*;
 import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.bson.Document;
@@ -23,8 +22,6 @@ import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 
-
-import com.mongodb.client.model.Filters;
 
 @RunWith(GUITestRunner.class)
 public class sudyPlanManagerAppTestE2E extends AssertJSwingJUnitTestCase {

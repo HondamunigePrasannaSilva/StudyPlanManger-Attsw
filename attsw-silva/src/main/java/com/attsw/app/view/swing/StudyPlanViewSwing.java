@@ -66,7 +66,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		txtStudentId.addKeyListener(new KeyAdapter() {
 			@Override 
 			public void keyReleased(KeyEvent e) {
-				btnLogin.setEnabled(!txtStudentId.getText().isEmpty() && txtStudentId.getText().trim().length() > 0);
+				btnLogin.setEnabled(!txtStudentId.getText().trim().isEmpty());
 			}
 		}); 
 		txtStudentId.setHorizontalAlignment(SwingConstants.CENTER);
@@ -174,10 +174,10 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 				showStudyPlan(s.getStudyPlan());
 		});
 		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setOrientation(SwingConstants.VERTICAL);
-		separator_1.setBounds(613, 140, 18, 461);
-		contentPane.add(separator_1);
+		JSeparator separator1 = new JSeparator();
+		separator1.setOrientation(SwingConstants.VERTICAL);
+		separator1.setBounds(613, 140, 18, 461);
+		contentPane.add(separator1);
 		
 		JLabel lblManagement = new JLabel("Management");
 		lblManagement.setHorizontalAlignment(SwingConstants.CENTER);
@@ -223,12 +223,12 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		
 		
 		
-		JLabel lblStudyPlan_1 = new JLabel("Study Plan");
-		lblStudyPlan_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblStudyPlan_1.setFont(new Font(FONT, Font.BOLD, 21));
-		lblStudyPlan_1.setBounds(739, 101, 313, 67);
-		contentPane.add(lblStudyPlan_1);
-		lblStudyPlan_1.setName("lblStudyPlan_1");
+		JLabel lblStudyPlan1 = new JLabel("Study Plan");
+		lblStudyPlan1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblStudyPlan1.setFont(new Font(FONT, Font.BOLD, 21));
+		lblStudyPlan1.setBounds(739, 101, 313, 67);
+		contentPane.add(lblStudyPlan1);
+		lblStudyPlan1.setName("lblStudyPlan_1");
 		
 		lbErrorMsg = new JLabel(" ");
 		lbErrorMsg.setFont(new Font(FONT, Font.BOLD, 14));
