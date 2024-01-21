@@ -38,6 +38,11 @@ Project for Advanced techniques and tools for software development (ATTSW) cours
 ## Demo
 If you want to interact with the application, you must first run the Docker Compose file to start a MongoDB server with a database initialized using the data inside the mongo-init folder. The server is started at the address `0.0.0.0` with access to port `27019`.
 
+``` 
+docker-compose up
+```
+
+
 Navigate to the `attsw-silva` folder and execute the following command:
 
 ``` 
