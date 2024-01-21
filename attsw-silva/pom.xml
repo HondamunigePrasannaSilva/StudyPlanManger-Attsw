@@ -94,10 +94,29 @@
          <artifactId>sonar-maven-plugin</artifactId>
          <version>3.8.0.2131</version>
         </plugin>
+        
       </plugins>	
     </pluginManagement>
     <plugins>
-	
+       <plugin>
+         <groupId>org.pitest</groupId>
+         <artifactId>pitest-maven</artifactId>
+         <version>1.5.2</version>
+         <configuration>
+           <targetClasses>
+            <param>com.attsw.app.controller.*</param>
+            <param>com.attsw.app.repository.mongo.*</param>
+           </targetClasses>
+           <targetTests>
+            <param>com.attsw.app.controller.*</param>
+            <param>com.attsw.app.repository.mongo.*</param>
+           </targetTests>
+           <mutators>
+            <mutator>STRONGER</mutator>
+           </mutators>
+           <mutationThreshold>100</mutationThreshold>
+         </configuration>
+       </plugin>
        <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
@@ -315,5 +334,16 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+            <id>pit</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
   </profiles>
 </project>

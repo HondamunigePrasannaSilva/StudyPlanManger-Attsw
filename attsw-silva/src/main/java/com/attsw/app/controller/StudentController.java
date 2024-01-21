@@ -39,26 +39,25 @@ import com.attsw.app.view.StudyPlanView;
 		return student;
 	}
 
-	public Student insertCourseIntoStudyPlan(Student student,String addNameCourse, int addCfu) {
+	public void insertCourseIntoStudyPlan(Student student,String addNameCourse, int addCfu) {
 		
 		Course course = courseRepository.findByNameAndCfu(addNameCourse, addCfu);
 		if (course == null)
 		{
 			studyPlanView.showError(ERROR_COURSE_NOT_FOUND);
-			return null;
+			return;
 		}
 		
 		if (student.getStudyPlan().stream()
 				.filter(c -> c.getCourseId().equals(course.getCourseId()))
 				.count() > 0)
-			return null;
+			return;
 		
 		student.addCourse(course);
 		studentRepository.updateStudyPlan(student);
 		studyPlanView.courseAdded(course);
 		studyPlanView.showStudyPlan(student.getStudyPlan());
 		
-		return student;
 		
 	}
 

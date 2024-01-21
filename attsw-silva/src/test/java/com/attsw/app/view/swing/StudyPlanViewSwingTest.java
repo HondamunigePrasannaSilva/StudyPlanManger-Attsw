@@ -272,7 +272,6 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		txtCourseName.enterText("Analisi");
 		txtcfu.enterText("12");
 		
-		when(studentcontroller.insertCourseIntoStudyPlan(s, "Analisi", 12)).thenReturn(s);
 		
 		window.button("btnInsertNewCourse").click();
 		verify(studentcontroller).insertCourseIntoStudyPlan(s, "Analisi", 12);

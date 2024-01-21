@@ -72,7 +72,7 @@ public class StudentMongoRepository implements StudentRepository{
 		return new Document(MNUMBER, student.getId()).append(NAME, student.getName())
 				.append(SURNAME, student.getSurname()).append(ID_CDL, student.getIdCdl())
 				.append(STUDY_PLAN, studyPlan);
-		
+		 
 		
 	}
 
