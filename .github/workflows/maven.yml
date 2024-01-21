@@ -27,7 +27,7 @@ jobs:
             - java: 8
             - java: 17
               additional-maven-args: >
-                -Pcoveralls, sonar:sonar, pit
+                -Pcoveralls, pit, sonar:sonar
                 -Dsonar.organization=hondamunigeprasannasilva
                 -Dsonar.host.url=https://sonarcloud.io
                 -Dsonar.projectKey=HondamunigePrasannaSilva_StudyPlanManger-Attsw
