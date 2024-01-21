@@ -59,8 +59,8 @@ public class StudyPlanControllerTest {
 		studentController.find("1");
 		verify(studyPlanView).showStudyPlan(student.getStudyPlan());
 	}
-
 	
+
 	// -------------------------INSERT COURSE INTO STUDY PLAN-------------------------
 	@Test
 	public void testInsertCourseIntoStudyPlan()
@@ -70,7 +70,9 @@ public class StudyPlanControllerTest {
 		
 		when(courseRepository.findByNameAndCfu("Analisi 2", 12)).thenReturn(analisi2);
 		studentController.insertCourseIntoStudyPlan(student, "Analisi 2", 12);
-		assertTrue(student.getStudyPlan().contains(analisi2));	
+		assertTrue(student.getStudyPlan().contains(analisi2));
+		verify(studyPlanView).courseAdded(analisi2);
+		verify(studyPlanView).showStudyPlan(student.getStudyPlan());
 	}
 
 	@Test
@@ -157,6 +159,8 @@ public class StudyPlanControllerTest {
 		when(courseRepository.findByNameAndCfu("Analisi 1", 12)).thenReturn(analisi1);
 		studentController.removeCourseFromStudyPlan(student, "Analisi 1", 12);
 		assertTrue(student.getStudyPlan().isEmpty());
+		verify(studyPlanView).courseRemoved(analisi1);
+		verify(studyPlanView).showStudyPlan(student.getStudyPlan());
 	}
 
 	@Test
@@ -168,6 +172,7 @@ public class StudyPlanControllerTest {
 		verify(studentRepository).updateStudyPlan(student);
 	}
 	
+	// -------------------------UPDATE COURSE FROM STUDY PLAN-------------------------
 	@Test
 	public void testUpdateOneCourseOfStudyPlan()
 	{
@@ -187,6 +192,7 @@ public class StudyPlanControllerTest {
 		verify(studentRepository).updateStudyPlan(student);
 		verify(studyPlanView).courseRemoved(course1);
 		verify(studyPlanView).courseAdded(course2);
+		verify(studyPlanView).showStudyPlan(s.getStudyPlan());
 		
 
 	}

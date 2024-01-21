@@ -1,0 +1,17 @@
+[
+{
+  "mnumber": "1",  "name": "mario",  "surname": "rossi",  "idCdl": "1",
+  "studyPlan": 
+  [
+    {"courseId": "2","courseName": "Fisica","cfu": 12 },
+    {"courseId": "3","courseName": "Informatica","cfu": 6}
+  ]
+},
+{
+  "mnumber": "2",  "name": "Luigi",  "surname": "Verdi",  "idCdl": "2",
+  "studyPlan":
+  [
+    {"courseId": "2","courseName": "Fisica", "cfu": 12 } 
+  ]
+}
+]

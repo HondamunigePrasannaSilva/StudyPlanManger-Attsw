@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  # MongoDB
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_DATABASE: studyplan
+
+  # MongoDB Data Initialization
+  mongo-init:
+    image: mongo:latest
+    depends_on:
+      - mongodb
+    command: bash -c 'mkdir -p /data/init && mongoimport --host mongodb --db studyplan --collection student --type json --file /data/init/student.json --jsonArray --drop && mongoimport --host mongodb --db studyplan --collection course --type json --file /data/init/course.json --jsonArray --drop'
+    volumes:
+      - ./mongo-init:/data/init
+    environment:
+      MONGO_INITDB_DATABASE: studyplan
+

@@ -1,0 +1,12 @@
+[
+{"courseName": "Analisi 1",    		"courseId": "1",   "cfu": "12" },
+{"courseName": "Fisica",       		"courseId": "2",   "cfu": "12" },
+{"courseName": "Informatica",  		"courseId": "3",   "cfu": "6"},
+{"courseName": "Chimica",      		"courseId": "4",   "cfu": "9" },
+{"courseName": "Sistemi Operativi",     "courseId": "5",   "cfu": "6" },
+{"courseName": "Reti Logiche",      	"courseId": "6",   "cfu": "9" },
+{"courseName": "Reti Informatiche",     "courseId": "7",   "cfu": "12" },
+{"courseName": "Geometria",	        "courseId": "8",   "cfu": "9" },
+{"courseName": "Deep learning",         "courseId": "9",   "cfu": "6" },
+{"courseName": "Machine learning",      "courseId": "10",  "cfu": "6" }
+]

@@ -30,7 +30,7 @@ import com.attsw.app.view.StudyPlanView;
 	public Student find(String studentId) {
 		
 		Student student = studentRepository.findById(studentId);
-
+		
 		if (student == null)
 			studyPlanView.showError(ERROR_STUDENT_NOT_FOUND);
 		else
@@ -56,6 +56,7 @@ import com.attsw.app.view.StudyPlanView;
 		student.addCourse(course);
 		studentRepository.updateStudyPlan(student);
 		studyPlanView.courseAdded(course);
+		studyPlanView.showStudyPlan(student.getStudyPlan());
 		
 		return student;
 		
@@ -76,19 +77,20 @@ import com.attsw.app.view.StudyPlanView;
 		{
 			studentRepository.updateStudyPlan(student);
 			studyPlanView.courseRemoved(course);
+			studyPlanView.showStudyPlan(sp);
 		}
 		else
 			studyPlanView.showError(ERROR_COURSE_NOT_IN_STUDY_PLAN);
 	}
 
-	
+
 	public Student updateStudyPlan(Student student,String delNameCourse, int delCfu, String addNameCourse, int addCfu) {
 		
 		Course courseToAdd = courseRepository.findByNameAndCfu(addNameCourse, addCfu);
 		Course coursetoUpdate = courseRepository.findByNameAndCfu(delNameCourse, delCfu);
 		
 		if (courseToAdd == null)
-		{			
+		{
 			studyPlanView.showError(ERROR_COURSE_NOT_FOUND);
 			return student;
 		}
@@ -100,11 +102,12 @@ import com.attsw.app.view.StudyPlanView;
 			studentRepository.updateStudyPlan(student);
 			studyPlanView.courseRemoved(coursetoUpdate);
 			studyPlanView.courseAdded(courseToAdd);
+			studyPlanView.showStudyPlan(sp);
 			
 		} 
 		else
 			studyPlanView.showError(ERROR_COURSE_NOT_IN_STUDY_PLAN);
-		return student;
+		return student; 
 		
 	} 
 	

@@ -90,6 +90,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 				txtStudentId.setEnabled(false);
 				showStudyPlan(student.getStudyPlan());
 				btnLogout.setEnabled(true);
+				lbErrorMsg.setText(" ");
 			}
 			else
 				lbErrorMsg.setText("Student not found");
@@ -155,8 +156,9 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnInsertNewCourse.setBounds(104, 543, 186, 25);
 		contentPane.add(btnInsertNewCourse);
 		btnInsertNewCourse.setName("btnInsertNewCourse");
-		btnInsertNewCourse.addActionListener(e ->  	
-				studentcontroller.insertCourseIntoStudyPlan(student,txtCourseName.getText(), Integer.parseInt(txtcfu.getText()))
+		btnInsertNewCourse.addActionListener(e ->  
+				studentcontroller.insertCourseIntoStudyPlan(student,txtCourseName.getText(),
+							Integer.parseInt(txtcfu.getText()))
 		);
 		
 	
@@ -166,13 +168,13 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnUpdateCourse.setBounds(319, 543, 166, 25);
 		contentPane.add(btnUpdateCourse);
 		btnUpdateCourse.setName("btnUpdateCourse");
-		btnUpdateCourse.addActionListener(e -> {
-
-				Student s = studentcontroller.updateStudyPlan(student, clist.getSelectedValue().getCourseName(),
-							clist.getSelectedValue().getCfu(), txtCourseName.getText(),
-							Integer.parseInt(txtcfu.getText()));					
-				showStudyPlan(s.getStudyPlan());
-		});
+		btnUpdateCourse.addActionListener(e ->
+				studentcontroller.updateStudyPlan(student, 
+							clist.getSelectedValue().getCourseName(),
+							clist.getSelectedValue().getCfu(),
+							txtCourseName.getText(),
+							Integer.parseInt(txtcfu.getText()))					
+			);
 		
 		JSeparator separator1 = new JSeparator();
 		separator1.setOrientation(SwingConstants.VERTICAL);
@@ -220,8 +222,6 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		
 		clist.setName("CourseList");
 		scrollPane.setViewportView(clist);
-		
-		
 		
 		JLabel lblStudyPlan1 = new JLabel("Study Plan");
 		lblStudyPlan1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -275,10 +275,10 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 
 	public void setSudyPlanController(StudentController studentcontroller) {
 		this.studentcontroller = studentcontroller;
-		
+
 	}
-	
-	
+
+
 
 	DefaultListModel<Course> getCourseList() {
 		
@@ -289,7 +289,8 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	public void showStudyPlan(List<Course> courses) {
 		courseList.clear();
 		courses.forEach(courseList::addElement);
-
+		resetLabel();
+		resetFields();
 		
 	}
 
@@ -301,17 +302,20 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 
 	@Override
 	public void courseAdded(Course course) {
-		
-		courseList.addElement(course);
-		resetLabel();
-		
+		courseList.addElement(course);		
 	}
 
 	@Override
 	public void courseRemoved(Course course) {
-		
 		courseList.removeElement(course);
-		resetLabel();
+	}
+	
+	private void resetFields()
+	{
+		txtcfu.setText("");
+		txtCourseName.setText("");
+		btnInsertNewCourse.setEnabled(false);
+		btnUpdateCourse.setEnabled(false);
 		
 	}
 	private void resetLabel()

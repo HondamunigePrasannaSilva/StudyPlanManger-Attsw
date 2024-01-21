@@ -6,6 +6,9 @@ package com.attsw.app.view.swing;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -87,7 +90,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.textBox("txtStudentId").enterText("1");
 		assertThat(window.button("btnLogin").isEnabled()).isTrue();
 	}
-	 
+
 	@Test
 	public void testLoginButtonDisabledWhenStudentIdisBlank() {
 
@@ -304,6 +307,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		verify(studentcontroller).updateStudyPlan(s, "Analisi 1", 12, "Analisi 2", 12);
 	}
 	
+	
 	@Test
 	public void testRemoveCourseShouldCallStudentControllRemove() {
 		
@@ -356,11 +360,13 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 			sp.add(c1);
 			sp.add(c2);
 			studyplanview.showStudyPlan(sp);
+			studyplanview.courseRemoved(c1);
 		});
-
-		GuiActionRunner.execute(() -> studyplanview.courseRemoved(c1));
-
+		
+		
+		
 		String[] listContents = window.list("CourseList").contents();
+		
 		assertThat(listContents).containsExactly("Course: 2 Analisi 2 12");
 	}
 
