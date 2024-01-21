@@ -27,7 +27,7 @@ jobs:
             - java: 8
             - java: 17
               additional-maven-args: >
-                -Pcoveralls, pit, sonar:sonar
+                -Pcoveralls,pit, sonar:sonar
                 -Dsonar.organization=hondamunigeprasannasilva
                 -Dsonar.host.url=https://sonarcloud.io
                 -Dsonar.projectKey=HondamunigePrasannaSilva_StudyPlanManger-Attsw
@@ -71,5 +71,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: surefire-report-jdk-${{ matrix.java }}
-        path: '**/target/site'
+        path: |
+           **/target/site
+           **/target/pit-reports
 

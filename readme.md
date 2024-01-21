@@ -19,7 +19,7 @@
 
 Project for Advanced techniques and tools for software development (ATTSW) course at University of Florence (Unifi) Prof.Lorenzo Bettini.
 
-# Project structure
+## Project structure
 ```
 \StudyPlanManager-Attsw
 ├── .github/workflows       - contains the github action workflows yaml file
@@ -35,8 +35,8 @@ Project for Advanced techniques and tools for software development (ATTSW) cours
 ├── docker-compose.yml	    - Neccessary for a demo
 └── readme.md
 ```
-### Demo
-If you want to interact with the application, you must first run the Docker Compose file to start a MongoDB server with a database initialized using the data inside the mongo-init folder. The server is started at the address 0.0.0.0 with access to port 27019.
+## Demo
+If you want to interact with the application, you must first run the Docker Compose file to start a MongoDB server with a database initialized using the data inside the mongo-init folder. The server is started at the address `0.0.0.0` with access to port `27019`.
 
 Navigate to the `attsw-silva` folder and execute the following command:
 
@@ -51,7 +51,7 @@ Then, you can run the following command:
 java -jar target/attsw-silva-0.0.1-SNAPSHOT.jar --mongo-host=0.0.0.0 --mongo-port=27019
 ```
 
-### Test Instructions
+## Test Instructions
 
 For testing purposes, navigate to the `attsw-silva` folder and run the command:
 
