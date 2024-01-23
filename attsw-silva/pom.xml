@@ -258,10 +258,6 @@
                 <ports>
                   <port>mongo.mapped.port:27017</port>
                 </ports>
-                 <wait>
-                 <log>waiting for connections on port</log>
-                 <time>60000</time>
-                 </wait>
               </run>
             </image>
           </images>
