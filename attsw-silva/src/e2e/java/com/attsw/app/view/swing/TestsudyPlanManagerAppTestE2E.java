@@ -61,11 +61,6 @@ public class TestsudyPlanManagerAppTestE2E extends AssertJSwingJUnitTestCase {
 		addCourseToDB("1", "Analisi Matematica", "12");
 		addCourseToDB("2", "Fisica", "12");
 		addCourseToDB("3", "Informatica", "6");
-		addCourseToDB("4", "Sistemi Operativi", "9");
-		addCourseToDB("4", "Sistemi Operativi", "9");
-		addCourseToDB("5", "Programmazione 1", "9");
-		addCourseToDB("6", "Programmazione 2", "9");
-		
 
 		application("com.attsw.app.swing.StudyPlanManger")
 				.withArgs(

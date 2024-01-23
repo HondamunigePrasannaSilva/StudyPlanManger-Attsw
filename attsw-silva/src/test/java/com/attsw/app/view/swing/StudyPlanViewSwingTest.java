@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -83,7 +82,8 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		assertThat(window.list("CourseList").contents()).isEmpty();
 
 	}
-
+	
+	
 	@Test
 	public void testLoginButtonEnableWhenStudentIdIsNotEmpty() {
 
@@ -98,7 +98,6 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		
 		assertThat(window.button("btnLogin").isEnabled()).isFalse();
 	}
-	
 	
 	@Test @GUITest
 	public void testEnableButtonsAndTxtFieldWhenLoginButtonIsPressed() {
@@ -120,10 +119,20 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.textBox("txtStudentId").requireDisabled();
 		window.button("btnLogin").requireDisabled();
 		
-		window.button("btnRemoveSelectedCourse").requireEnabled();
 		window.scrollPane("scrollPane").requireEnabled();
 		
 		window.button("btnLogout").requireEnabled();
+		window.button("btnLogin").requireDisabled();
+		
+	}
+	@Test
+	public void testInsertCourseButtonShouldBeDisabledIfStudentIsNotLogged()
+	{
+		window.textBox("txtCourseName").enterText("Analisi");
+		window.textBox("txtcfu").enterText("12");
+		
+		assertThat(window.button("btnInsertNewCourse").isEnabled()).isFalse();
+		
 	}
 	
 	@Test
@@ -193,6 +202,7 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		
 		assertThat(window.label("lbErrorMsg").text()).isEqualTo("error message");
 	}
+	
 	@Test
 	public void testUpdateButtonShouldBeEnabledOnlyWhenACourseIsSelected() {
 
@@ -218,10 +228,11 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 	}
 	
 	@Test
-	public void testInsertButtonShouldBeEnabledOnlyWhenCourseNameAndCfuAreNotEmpty() {
+	public void testInsertButtonShouldBeEnabledOnlyWhenCourseNameAndCfuAreNotEmptyAndLoggedIsTrue() {
 		
 		JTextComponentFixture txtCourseName = window.textBox("txtCourseName");
 		JTextComponentFixture txtcfu= window.textBox("txtcfu");
+		studyplanview.setLogged(true);
 		
 		txtCourseName.enterText("Analisi");
 		txtcfu.enterText("12");
@@ -305,7 +316,6 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		window.button("btnUpdateCourse").click();
 		verify(studentcontroller).updateStudyPlan(s, "Analisi 1", 12, "Analisi 2", 12);
 	}
-	
 	
 	@Test
 	public void testRemoveCourseShouldCallStudentControllRemove() {

@@ -48,6 +48,8 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 	
 	
 	public static final String FONT = "Dialog";
+	private boolean logged = false;
+	
 	public StudyPlanViewSwing() {
 		setTitle("Study Plan Manager");
 		setResizable(false);
@@ -84,13 +86,13 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 			if (student != null) 
 			{
 				
-				btnRemoveSelectedCourse.setEnabled(true);
 				scrollPane.setEnabled(true);
 				btnLogin.setEnabled(false);
 				txtStudentId.setEnabled(false);
 				showStudyPlan(student.getStudyPlan());
 				btnLogout.setEnabled(true);
 				lbErrorMsg.setText(" ");
+				setLogged(true);
 			}
 			else
 				lbErrorMsg.setText("Student not found");
@@ -137,6 +139,7 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 			public void keyReleased(KeyEvent e) {
 				btnInsertNewCourse.setEnabled(
 					!txtCourseName.getText().trim().isEmpty() && !txtcfu.getText().trim().isEmpty()
+					&& logged
 				);
 			}
 		};
@@ -262,6 +265,8 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 				courseList.clear();
 				lbErrorMsg.setText(" ");
 				btnLogout.setEnabled(false);
+				
+				setLogged(false);
 			
 		});
 		btnRemoveSelectedCourse.addActionListener(e ->{
@@ -318,6 +323,11 @@ public class StudyPlanViewSwing extends JFrame implements StudyPlanView {
 		btnUpdateCourse.setEnabled(false);
 		
 	}
+	public void setLogged(boolean log)
+	{
+		logged = log;
+	}
+	
 	private void resetLabel()
 	{
 		lbErrorMsg.setText(" ");
