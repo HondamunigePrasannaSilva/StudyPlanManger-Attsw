@@ -317,15 +317,13 @@ public class StudyPlanViewSwingTest extends AssertJSwingJUnitTestCase{
 		sp.add(c);
 		sp.add(c1);
 		s.setStudyPlan(sp);
-		
+
 		window.textBox("txtStudentId").enterText("1");
 		when(studentcontroller.find("1")).thenReturn(s);
 		window.button("btnLogin").click();
 
 		GuiActionRunner.execute(() -> {
-			DefaultListModel<Course> courseList = studyplanview.getCourseList();
-			courseList.addElement(c);
-			courseList.addElement(c1);
+			studyplanview.showStudyPlan(sp);
 		});
 
 		window.list("CourseList").selectItem(0);
