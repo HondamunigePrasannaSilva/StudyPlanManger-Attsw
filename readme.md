@@ -47,13 +47,13 @@ Navigate to the `attsw-silva` folder and execute the following command:
 
 ``` 
 mvn clean package
- ```
+```
 
 to create the JAR files.
 
 Then, you can run the following command:
 ```
-java -jar target/attsw-silva-0.0.1-SNAPSHOT.jar --mongo-host=0.0.0.0 --mongo-port=27019
+java -jar target/attsw-silva-0.0.1-SNAPSHOT-jar-with-dependencies.jar --mongo-host=0.0.0.0 --mongo-port=27019
 ```
 
 ## Test Instructions
