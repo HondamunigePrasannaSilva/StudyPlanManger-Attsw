@@ -159,6 +159,7 @@ public class StudentControllerTestIT {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	private Student fromDocumentToStudent(Document d) {
 
 		List<Document> studyPlan = (List<Document>) d.get("studyPlan");
