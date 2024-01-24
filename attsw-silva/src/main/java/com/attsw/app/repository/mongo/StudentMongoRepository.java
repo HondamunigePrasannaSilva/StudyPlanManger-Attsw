@@ -77,6 +77,7 @@ public class StudentMongoRepository implements StudentRepository{
 	}
 
 
+	@SuppressWarnings("unchecked")
 	private Student fromDocumentToStudent(Document d) {
 		
 		List<Document> studyPlan = (List<Document>) d.get(STUDY_PLAN);
